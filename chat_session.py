@@ -5,6 +5,7 @@
 import openai
 import ast
 import json
+import os
 
 from MessageNode import MessageNode
 
@@ -132,7 +133,7 @@ class ChatSession:
         self.notes = notes
 
         # import the openai api key
-        openai.api_key = open("keys/OPENAI_API_KEY", "r").read()
+        openai.api_key = os.getenv('OPENAI_API_KEY')
 
         return
     

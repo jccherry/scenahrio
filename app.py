@@ -1,5 +1,6 @@
 # Library Imports
 from flask import Flask, session, redirect, url_for, render_template, request
+import os
 
 # Custom Imports
 from MessageNode import MessageNode
@@ -12,7 +13,7 @@ app = Flask(__name__, static_folder='static')
 app.jinja_env.filters['normalize_field_name'] = normalize_field_name
 
 # Set the secret key used for session encryption
-app.secret_key = open("keys/APP_SECRET_KEY", "r").read()
+app.secret_key = os.getenv('APP_SECRET_KEY')
 
 default_user = User(
     user_type = "Employee"
