@@ -1,0 +1,66 @@
+{% macro render_tree(node) %}
+    <div class="node">
+        {% if not node.parent %}
+        <div class="form_header">
+            <span class="form_header_label">Chat Session</span>
+            <button id="reset-tree-button" class="reset_form_button">Reset Session</button>
+        </div>
+        {% endif %}
+        <div class="node_content">
+            <span class="node_user_type">{{ node.user_type }}:</span>
+            <span class="node_message" id="node_message_{{node.id}}">{{ node.message }}</span>
+            <textarea class="node_data_input" id="node_input_{{node.id}}" data-id="{{node.id}}" style="display: None;" type="text"></textarea>
+            <div class = "button_container">
+                <button class="edit_node_button" data-id="{{node.id}}" id="edit_node_{{node.id}}">Edit</button>
+                <button class="save_node_button" data-id="{{node.id}}" id="save_node_{{node.id}}" style="display: none;">Save</button>
+                <button class="branch_button" data-id="{{node.id}}" id="branch_node_{{node.id}}">Branch</button>
+                {% if node.parent %}
+                    <button class="delete_node_button" data-id="{{node.id}}" id="delete_node_{{node.id}}">X</button>
+                {% endif %}
+            </div>
+        </div>
+        
+        {% if node.children %}
+            {% for child in node.children %}
+                {{ render_tree(child) }}
+            {% endfor %}
+        {% endif %}
+        
+    </div>
+{% endmacro %}
+
+{% macro render_user_form(user) %}
+    <div class="user_form">
+        <div class="form_header">
+            <span class="form_header_label">User Profile</span>
+            <button id="reset-user-button" class="reset_form_button">Reset Profile</button>
+        </div>
+        {% for user_property in ['user_type', 'name', 'gender', 'age', 'current_salary', 'years_experience', 'job_title', 'notes'] %}
+        <div class = "user_data_entry">
+            <span class="user_data_label">{{user_property|normalize_field_name}}: </span>
+            <span class="user_data_field" id="span_user_{{user_property}}" data-id="{{user_property}}">{{user.get_field(user_property)}}</span>
+            <textarea class="user_data_input" id="user_input_{{user_property}}" data-id="{{user_property}}" style="display: None;" type="text"></textarea>
+            <button class="user_data_edit_button" id="user_edit_{{user_property}}" data-id="{{user_property}}">Edit</button>
+            <button class="user_data_save_button" id="user_save_{{user_property}}" data-id="{{user_property}}" style="display: None;">Save</button>
+        </div>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro render_chat_settings_form(chat_session) %}
+    <div class="chat_settings_form">
+        <div class="form_header">
+            <span class="form_header_label">Session Settings</span>
+            <button id="reset-settings-button" class="reset_form_button">Reset Settings</button>
+        </div>
+        {% for setting in ['desired_outcome', 'notes'] %}
+        <div class = "setting_data_entry">
+            <span class="setting_data_label">{{setting|normalize_field_name}}: </span>
+            <span class="setting_data_field" id="span_setting_{{setting}}" data-id="{{setting}}">{% if chat_session.get_field(setting) %}{{chat_session.get_field(setting)}}{% else %} {% endif %}</span>
+            <textarea class="setting_data_input" id="setting_input_{{setting}}" data-id="{{setting}}" style="display: None;" type="text"></textarea>
+            <button class="setting_data_edit_button" id="setting_edit_{{setting}}" data-id="{{setting}}">Edit</button>
+            <button class="setting_data_save_button" id="setting_save_{{setting}}" data-id="{{setting}}" style="display: None;">Save</button>
+        </div>
+        {% endfor %}
+    </div>
+{% endmacro %}

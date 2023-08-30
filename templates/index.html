@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scenahr.io</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1><span class="header_first">Scena</span><span class="header_second">hr.io</span></h1>
+    </header>
+    <div class="centered-container">
+        {% from "macros.html" import render_chat_settings_form %}
+        {{ render_chat_settings_form(chat_session) }}
+    </div>
+    <div class="centered-container">
+        <!--<button id="get-chat-session-button" class="delete_button">Debug Chat Session</button>-->
+        {% from "macros.html" import render_user_form %}
+        {{ render_user_form(user) }}
+    </div>
+    <div class="centered-container">
+        {% from "macros.html" import render_tree %}
+        {{ render_tree(root_node) }}
+    </div>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+</html>

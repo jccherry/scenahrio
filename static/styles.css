@@ -1,0 +1,281 @@
+/* Reset some default styles */
+body,
+div,
+p,
+h1,
+h2,
+h3,
+ul,
+li {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+body {
+    font-family: Roboto, sans-serif;
+    background-color: #f7f7f7;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* Center the content horizontally and vertically */
+.centered-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* height: 100vh; /* 100% of the viewport height */
+}
+
+/* Apply styling to buttons */
+button {
+    padding: 8px 12px;
+    margin: 4px;
+    border: none;
+    background-color: #3498db;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* On hover, darken the background color */
+button:hover {
+    background-color: #2c86c2;
+    /* Darker color */
+}
+
+/* Apply border to nodes */
+.node {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 5px;
+    background-color: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.node_content {
+    display: flex;
+    align-items: center;
+}
+
+.input_message {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 70%;
+    /* 70% of the parent width */
+    margin: 5px 0;
+    font-size: 14px;
+    box-sizing: border-box;
+    /* Include padding and border in the element's total width */
+}
+
+.input_message {
+    margin-top: auto;
+    /* Push the input box to the bottom */
+}
+
+/* Hide the edges of the input box */
+.input_message:focus {
+    outline: none;
+    border-color: #3498db;
+    /* Change border color on focus */
+}
+
+/* Set the width of the centered container */
+.centered-container>div {
+    width: 70%;
+    /* Set the width to 70% */
+    max-width: 900px;
+    /* Optional: Add a maximum width if needed */
+}
+
+/* Apply styling to delete buttons */
+.reset_form_button {
+    padding: 6px 10px;
+    margin: 4px;
+    border: none;
+    background-color: #e74c3c;
+    /* Red color */
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.delete_node_button {
+    border: none;
+    background-color: #e74c3c;
+    /* Red color */
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+/* On hover, darken the background color */
+.delete_node_button:hover, .reset_form_button:hover {
+    background-color: #c0392b;
+    /* Darker red color */
+}
+
+.button_container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    /* Align buttons to the right side */
+    margin-left: auto;
+    /* Push buttons to the right */
+}
+
+/* Make sure the message takes up the left 70% and wraps if needed */
+.node_message {
+    flex: 1;
+    /* Take up remaining space */
+    width: 50%;
+    /* 70% of the parent width */
+    word-wrap: break-word;
+    /* Wrap long words */
+    white-space: normal;
+    /* Allow text to wrap to the next line */
+}
+
+.node_data_input {
+
+}
+
+.node_user_type {
+    flex: 0 0 10%;
+    color: #7f7f7f
+}
+
+/* Apply border to user form */
+.user_form {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 5px;
+    background-color: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for the user_data_entry divs */
+.user_data_entry, .setting_data_entry, .user_data_field, .setting_data_field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid lightgrey;
+}
+
+/* Style for the user_data_label */
+.user_data_label, .setting_data_label {
+    min-width: 150px;
+    color: #7f7f7f
+}
+
+/* Style for the user_data_entry and user_data_input */
+.user_data_entry,
+.user_data_input,
+.setting_data_entry,
+.setting_data_input,
+.user_data_field,
+.setting_data_field {
+    flex: 1;
+    /* Dynamically take up available space */
+}
+
+/* Style for the user_data_input */
+.user_data_input,
+.setting_data_input,
+.node_data_input {
+    flex: 1;
+    /* Dynamically take up available space */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+    /* Include padding and border in the element's total width */
+    transition: border-color 0.3s ease;
+}
+
+/* On focus, change the border color */
+.user_data_input:focus,
+.setting_data_input:focus
+.node_data_input:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+/* Placeholder styling */
+.user_data_input::placeholder,
+.setting_data_input::placeholder,
+.node_data_input::placeholder {
+    color: #aaa;
+}
+
+/* Disabled state styling */
+.user_data_input:disabled,
+.setting_data_inpug:disabled
+.node_data_input:disabled {
+    background-color: #f7f7f7;
+    cursor: not-allowed;
+}
+
+/* Style for the user_data_edit_button and user_data_save_button */
+.user_data_edit_button,
+.user_data_save_button,
+.setting_data_edit_button,
+.setting_data_save_button {
+    width: 10%;
+}
+
+/* Show the button when the input field is hidden */
+.user_data_entry .user_data_input+.user_data_edit_button,
+.setting_data_entry .setting_data_input+.setting_data_edit_button {
+    display: inline-block;
+}
+
+/* Show the button when the entry value is hidden */
+.user_data_input+.user_data_save_button,
+.setting_data_input+.setting_data_save_button {
+    display: inline-block;
+}
+
+.chat_settings_form {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 5px;
+    background-color: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.form_header {
+    margin-bottom: 10px;
+    /* Add some space at the bottom */
+    border-bottom: 2px solid #3498db;
+    /* Add a border line at the bottom */
+    padding-bottom: 5px;
+    /* Add some space between text and border */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.form_header_label {
+    flex: 1;
+    font-size: 24px;
+    /* Adjust the font size as needed */
+    color: #333;
+}
+
+.reset_form_button {
+    flex: 0 0 15%;
+}
