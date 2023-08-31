@@ -1,5 +1,6 @@
 # Library Imports
 from flask import Flask, session, redirect, url_for, render_template, request
+from dotenv import load_dotenv
 import os
 
 # Custom Imports
@@ -13,7 +14,9 @@ app = Flask(__name__, static_folder='static')
 app.jinja_env.filters['normalize_field_name'] = normalize_field_name
 
 # Set the secret key used for session encryption
-app.secret_key = os.getenv('APP_SECRET_KEY')
+load_dotenv()
+app_secret_key = os.getenv('APP_SECRET_KEY')
+app.secret_key = app_secret_key
 
 default_user = User(
     user_type = "Employee"
@@ -188,3 +191,4 @@ def index():
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0",port=5000)
+    #app.run(debug=True)
