@@ -20,7 +20,7 @@ app.secret_key = app_secret_key
 
 default_user = User(
     user_type = "Employee"
-    , name = "Josiah Crysanthemums" 
+    , name = "John Doe"
     , gender = "Male"
     , age = 35
     , current_salary = 59_000
@@ -28,6 +28,8 @@ default_user = User(
     , job_title = "Maintenance Technician"
     , notes = "Dislikes his manager; Arrives late a few times a month"
 )
+default_goal = "Retain this Employee."
+default_input = "I am unhappy with my manager and my pay."
 
 # Retrieve the user's unique MessageNode Tree from the user session
 def get_message_tree():
@@ -51,7 +53,7 @@ def update_current_user(user: User):
 def get_current_chat_session():
     if not 'current_chat_session' in session:
         user = default_user
-        current_chat_session = ChatSession(user, "Retain this person", "I don't like my manager and I want to make more money")
+        current_chat_session = ChatSession(user, default_goal, default_input)
     else:
         current_chat_session = ChatSession.from_json(session['current_chat_session'])
     
@@ -190,5 +192,5 @@ def index():
     return render_template('index.html', root_node = message_tree, user=user, chat_session=current_chat_session)
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",port=5000)
-    #app.run(debug=True)
+    #app.run(host="0.0.0.0",port=5000)
+    app.run(debug=True)
