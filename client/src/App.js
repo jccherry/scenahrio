@@ -3,8 +3,12 @@ import './App.css';
 import React, { useEffect, useState } from 'react'
 import jwt_decode from 'jwt-decode'
 
+//import EditForm from './EditForm';
+import ProfileInputForm from './ProfileInputForm';
+
 function App() {
   const [user, setUser] = useState({});
+  const [form, setForm] = useState({});
 
   function handleCallbackResponse(response) {
     //console.log("Encoded JWT ID Token: " + response.credential);
@@ -13,11 +17,11 @@ function App() {
     fetch('/login_user', {
       method: 'POST',
       headers: {
-          'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ user: userObject }), // Send new message as JSON
     }).then(response => response.json())
-    .then(user => {setUser(user.user)});
+      .then(user => { setUser(user.user) });
   }
 
   // Handles signing out of our backend by sending a GET request to log out and
@@ -27,16 +31,16 @@ function App() {
     fetch("/logout", {
       method: 'GET'
     }).then(response => response.json())
-    .then(message => {
-      console.log(message);
-      window.location.reload();
-    });
+      .then(message => {
+        console.log(message);
+        window.location.reload();
+      });
   }
 
   // Attempt to initialize google
   function tryInitialize(maxAttempts) {
     let attempts = 0;
-  
+
     while (attempts < maxAttempts) {
       try {
         /* global google */
@@ -51,7 +55,7 @@ function App() {
         console.log(`Attempt ${attempts} failed. Retrying...`);
       }
     }
-    
+
     // If all attempts fail, return false
     return false;
   }
@@ -61,14 +65,14 @@ function App() {
     console.log('Current Origin:', currentOrigin);
 
     var initialize_result = tryInitialize(5);
-    
+
     if (initialize_result) {
       console.log("Google is initialized")
     } else {
       console.log("Google Initialization Failed")
       window.location.reload()
     }
-    
+
     // Call the backend to see if there is a currently logged in user
     fetch('/get_logged_in_user')
       .then((response) => {
@@ -113,21 +117,42 @@ function App() {
     // if the user has a name, it exists and a user is logged in
     return (
       <>
-      <div id='signInDiv'></div>
-      { user &&
-      <div className='userProfile'>
-        <div>
-          <img src={user.picture}></img>
-          <h3>{user.name}</h3>
-          <p>{user.email}</p>
-        </div>
-      </div>
-      }
-      { isUserLoggedIn() &&
-      <button onClick={() => handleSignOut()}>Sign Out</button>
-      }
+        <div id='signInDiv'></div>
+        {user &&
+          <div className='userProfile'>
+            <div>
+              <img src={user.picture}></img>
+              <h3>{user.name}</h3>
+              <p>{user.email}</p>
+            </div>
+          </div>
+        }
+        {isUserLoggedIn() &&
+          <button onClick={() => handleSignOut()}>Sign Out</button>
+        }
       </>
     );
+  }
+
+  // Component which starts with three things: A label
+
+
+  // Create this function where if you are editing, the display is a <input>, if you are not
+  // Editing, the display is a span, and it should have an onChangeFunction which is attached
+  // to the <inputs> that updates form variables using setState so that it can save and send
+  // to the database with one single callback from one button at some other point.
+  function FormInput(isEditing, formKey, onChangeFunction) {
+    return (
+      <div></div>
+    );
+  }
+
+  // View that allows a user to input information about an employee and then
+  // sends it to the API to get logged into the database
+  function EmployeeForm(user) {
+    if (user === {}) {
+      return <div></div>
+    }
   }
 
   return (
@@ -136,11 +161,17 @@ function App() {
         <div className="Header">
           <div className="titleDiv">Scenahr.io</div>
         </div>
-        <div className="Sidebar">
-          <UserProfile />
-        </div>
-        <div className="Content">
-
+        <div class="Main">
+          <div class="Sidebar">
+            <UserProfile />
+          </div>
+          <div class="Content">
+            {isUserLoggedIn() ? (
+              <ProfileInputForm />
+            ) : (
+              <div>Please log in to access this content.</div>
+            )}
+          </div>
         </div>
       </div>
     </>

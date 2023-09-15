@@ -1,76 +1,96 @@
-/* Container for Sidebar and Content */
-.App {
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Arial", sans-serif;
+  background-color: #f0f2f5; /* Muted grey-blue background */
+  color: #333; /* Dark text color */
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Top bar */
+.Header {
+  background-color: #1c3f63; /* Darker blue header */
+  height: 56px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
   display: flex;
-}
-
-/* Sidebar styles */
-.Sidebar {
-  background-color: #333; /* Example background color */
-  color: white; /* Example text color */
-  padding: 20px;
-  box-sizing: border-box;
-  height: 100vh; /* 100% viewport height */
-  width: 20%;
-  position: fixed; /* Fixed position to remain visible while scrolling */
-  overflow-y: auto; /* Add scrollbars if content overflows */
-  transition: width 0.3s ease; /* Add smooth width transition */
-  min-width: 275px;
-}
-
-/* Content styles */
-.Content {
-  background-color: #f0f0f0; /* Example background color */
-  padding: 20px;
-  box-sizing: border-box;
-  flex: 1; /* Flexible width to take remaining space */
-  margin-left: 10%; /* Leave space for the Sidebar */
-}
-
-/* Media query for screens 500px or narrower */
-@media (max-width: 500px) {
-  .Sidebar {
-    width: 100%; /* Full width on smaller screens */
-  }
-  
-  .Content {
-    margin-left: 0; /* No margin on smaller screens */
-  }
-}
-
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: 24px;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+/* Sidebar */
+.Sidebar {
+  background-color: #385b7c; /* Slightly lighter blue sidebar */
+  width: 240px;
+  position: fixed;
+  top: 56px; /* To avoid overlapping with the top bar */
+  left: 0;
+  bottom: 0;
+  overflow-y: auto;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  /* justify-content: center; */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Content */
+.Content {
+  margin-left: 240px; /* Width of the sidebar */
+  padding-top: 56px; /* Height of the top bar */
+  padding-left: 20px;
+  padding-right: 20px;
+  transition: margin-left 0.3s;
+  overflow-y: auto; /* Enable vertical scrollbar when content overflows vertically */
+  overflow-x: hidden; /* Hide horizontal scrollbar */
 }
 
+/* Apply modern fonts */
+.Header,
+.Sidebar,
+.Content {
+  font-family: "Roboto", sans-serif; /* Replace with your preferred modern font */
+}
 
+/* Hover effect for buttons */
+button:hover {
+  background-color: #1c3f63; /* Darker blue on hover */
+  color: white;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Container for each edit item */
+.editItemDiv {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* Label takes up 10% */
+.editItemLabel {
+  flex: 0 0 10%;
+}
+
+/* Input or Value takes up 85% */
+.editItemInput,
+.editItemValue {
+  flex: 0 0 85%;
+  padding: 5px;
+}
+
+/* Button takes up 5% */
+.editItemButton {
+  flex: 0 0 5%;
+}
+
+/* Header and Footer styling (optional) */
+.editFormHeader,
+.editFormFooter {
+  text-align: center;
+}
