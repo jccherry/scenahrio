@@ -1,5 +1,5 @@
 from flask import Flask, session, request, jsonify
-from python_modules.db_utils import add_user_to_database
+from python_modules.db_utils import add_user_to_database, add_profile_to_database
 from dotenv import load_dotenv
 
 import os
@@ -29,6 +29,13 @@ def get_logged_in_user():
 def logout_user():
     session.clear()
     return jsonify({"message" : "Logged Out"})
+
+@app.route('/add_profile', methods=['POST'])
+def add_profile():
+    profile_json = request.json.get('profile')
+    add_profile_to_database(profile_json, session['user']['aud'])
+
+    return jsonify({"message" : "Profile addded"})
 
 @app.route('/')
 def index():

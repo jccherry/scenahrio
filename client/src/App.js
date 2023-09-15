@@ -8,7 +8,6 @@ import ProfileInputForm from './ProfileInputForm';
 
 function App() {
   const [user, setUser] = useState({});
-  const [form, setForm] = useState({});
 
   function handleCallbackResponse(response) {
     //console.log("Encoded JWT ID Token: " + response.credential);

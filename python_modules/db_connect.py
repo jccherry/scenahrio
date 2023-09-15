@@ -1,5 +1,6 @@
 import os
 from sqlalchemy import create_engine
+from sqlalchemy import text
 import pandas as pd
 import re
 
@@ -12,7 +13,9 @@ def db_connection():
 def execute_command_no_return(sql_command):
     conn = db_connection()
     with conn.connect() as connection:
-        connection.execute(sql_command)
+        connection.execute(text(sql_command))
+        connection.commit()
+        connection.close()
 
 # Executes a command and returns data from the SQL server as a pandas dataframe
 def execute_query(sql_query):

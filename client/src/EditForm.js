@@ -4,7 +4,7 @@ import EditItem from "./EditItem";
 function EditForm({
     header_text = "Form"
     , formAttributes
-    , onSubmitFunction = (form) => { console.log(`Form submitted:`); console.log(form) }
+    , onSubmitFunction = (form) => { console.log(`Form submitted:`); console.log(form); }
     , footer = <div><hr></hr></div>
 }) {
 
