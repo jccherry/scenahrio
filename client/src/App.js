@@ -5,6 +5,8 @@ import jwt_decode from 'jwt-decode'
 
 //import EditForm from './EditForm';
 import ProfileInputForm from './ProfileInputForm';
+import SidebarItem from './SidebarItem';
+import DisplayProfiles from './DisplayProfiles';
 
 function App() {
   const [user, setUser] = useState({});
@@ -133,26 +135,11 @@ function App() {
     );
   }
 
-  // Component which starts with three things: A label
+  const [selectedComponent, setSelectedComponent] = useState(<div>Test</div>);
 
-
-  // Create this function where if you are editing, the display is a <input>, if you are not
-  // Editing, the display is a span, and it should have an onChangeFunction which is attached
-  // to the <inputs> that updates form variables using setState so that it can save and send
-  // to the database with one single callback from one button at some other point.
-  function FormInput(isEditing, formKey, onChangeFunction) {
-    return (
-      <div></div>
-    );
-  }
-
-  // View that allows a user to input information about an employee and then
-  // sends it to the API to get logged into the database
-  function EmployeeForm(user) {
-    if (user === {}) {
-      return <div></div>
-    }
-  }
+  const renderComponent = (component) => {
+    setSelectedComponent(component);
+  };
 
   return (
     <>
@@ -163,10 +150,14 @@ function App() {
         <div class="Main">
           <div class="Sidebar">
             <UserProfile />
+            <SidebarItem label="Profile" onClick={() => renderComponent(<ProfileInputForm />)} />
+            <SidebarItem label="List" onClick={() => renderComponent(<DisplayProfiles />)} />
+            <SidebarItem label="Feed" onClick={() => renderComponent(<div>Feed</div>)} />
           </div>
           <div class="Content">
+            
             {isUserLoggedIn() ? (
-              <ProfileInputForm />
+              selectedComponent
             ) : (
               <div>Please log in to access this content.</div>
             )}

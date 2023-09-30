@@ -1,5 +1,5 @@
 from flask import Flask, session, request, jsonify
-from python_modules.db_utils import add_user_to_database, add_profile_to_database
+from python_modules.db_utils import add_user_to_database, add_profile_to_database, get_user_profiles, delete_profile_from_database
 from dotenv import load_dotenv
 
 import os
@@ -25,6 +25,12 @@ def get_logged_in_user():
     else:
         return jsonify({'error': 'No Logged In User'})
     
+@app.route("/get_user_profiles", methods=["GET"])
+def get_user_profiles_callback():
+    print("RETURNING THE USER's PROFILES")
+    user_profiles = get_user_profiles(session['user']['sub']).to_json(orient='records', default_handler=str)
+    return user_profiles
+    
 @app.route("/logout", methods=['GET'])
 def logout_user():
     session.clear()
@@ -33,9 +39,16 @@ def logout_user():
 @app.route('/add_profile', methods=['POST'])
 def add_profile():
     profile_json = request.json.get('profile')
-    add_profile_to_database(profile_json, session['user']['aud'])
+    add_profile_to_database(profile_json, session['user']['sub'])
 
-    return jsonify({"message" : "Profile addded"})
+    return jsonify({"message" : "Profile added"})
+
+@app.route('/delete_profile', methods=['POST'])
+def delete_profile():
+    profile_id = request.json.get('profile_id')
+    print(f"DELETING USER PROFILE with profile_id = {profile_id}")
+    delete_profile_from_database(profile_id)
+    return jsonify({"message": "Profile deleted"})
 
 @app.route('/')
 def index():

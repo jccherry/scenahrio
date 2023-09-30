@@ -1,6 +1,8 @@
 from python_modules.db_connect import execute_command_no_return, execute_query, insert_dataframe_into_table
 import pandas as pd
 import re
+import hashlib
+import datetime
 
 # Add a user to the database if they don't exist already
 def add_user_to_database(user_json):
@@ -15,11 +17,27 @@ def add_user_to_database(user_json):
     else:
         print(f"User with sub = {user_id} already exists in database.")
 
-def add_profile_to_database(profile_json, user_aud):
+def add_profile_to_database(profile_json, user_sub):
+
+    print(profile_json)
+    id_to_hash = f"{user_sub}{profile_json['Name']}{datetime.datetime.now()}"
+    print(f"id_to_hash = {id_to_hash}")
+    unique_id = hashlib.sha256(id_to_hash.encode()).hexdigest()
+
     print(profile_json)
     profile_df = dict_to_dataframe(profile_json, normalize_headers=True)
-    profile_df.insert(0, 'user_aud', [user_aud])
+    profile_df.insert(0, 'user_sub', [user_sub])
+    profile_df.insert(0, 'profile_id', [unique_id])
     insert_dataframe_into_table(profile_df,'profiles')
+
+def delete_profile_from_database(profile_id):
+    cmd = f"DELETE FROM profiles WHERE profile_id = '{profile_id}'"
+    print(cmd)
+    execute_command_no_return(cmd)
+
+def get_user_profiles(user_sub):
+    print("Getting the users's profiles")
+    return execute_query(f"SELECT * FROM profiles WHERE user_sub = '{user_sub}'")
 
 def dict_to_dataframe(dict_data, normalize_headers=False):
     
