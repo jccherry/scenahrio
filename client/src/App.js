@@ -121,11 +121,9 @@ function App() {
         <div id='signInDiv'></div>
         {user &&
           <div className='userProfile'>
-            <div>
-              <img src={user.picture}></img>
-              <h3>{user.name}</h3>
-              <p>{user.email}</p>
-            </div>
+            <img src={user.picture}></img>
+            <h3>{user.name}</h3>
+            <p>{user.email}</p>
           </div>
         }
         {isUserLoggedIn() &&
@@ -149,13 +147,15 @@ function App() {
         </div>
         <div class="Main">
           <div class="Sidebar">
-            <UserProfile />
-            <SidebarItem label="Profile" onClick={() => renderComponent(<ProfileInputForm />)} />
-            <SidebarItem label="List" onClick={() => renderComponent(<DisplayProfiles />)} />
-            <SidebarItem label="Feed" onClick={() => renderComponent(<div>Feed</div>)} />
+            <div class="SidebarContent">
+              <UserProfile />
+              <SidebarItem label="Add Profile" onClick={() => renderComponent(<ProfileInputForm />)} />
+              <SidebarItem label="Employee Profiles" onClick={() => renderComponent(<DisplayProfiles />)} />
+              <SidebarItem label="Feed" onClick={() => renderComponent(<div>Feed</div>)} />
+            </div>
           </div>
           <div class="Content">
-            
+
             {isUserLoggedIn() ? (
               selectedComponent
             ) : (

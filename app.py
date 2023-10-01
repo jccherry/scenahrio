@@ -1,5 +1,5 @@
 from flask import Flask, session, request, jsonify
-from python_modules.db_utils import add_user_to_database, add_profile_to_database, get_user_profiles, delete_profile_from_database
+from python_modules.db_utils import *
 from dotenv import load_dotenv
 
 import os
@@ -49,6 +49,14 @@ def delete_profile():
     print(f"DELETING USER PROFILE with profile_id = {profile_id}")
     delete_profile_from_database(profile_id)
     return jsonify({"message": "Profile deleted"})
+
+@app.route('/edit_profile', methods=['POST'])
+def edit_profile():
+    profile_json = request.json.get('profile')
+    print("EDITING PROFILE")
+    print(profile_json)
+    edit_user_profile(profile_json)
+    return jsonify({"message": "Profile updated"})
 
 @app.route('/')
 def index():

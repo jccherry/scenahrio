@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import EditableForm from './EditableForm';
 
 function UserProfile({ profile, refreshFunction }) {
   const [expanded, setExpanded] = useState(false)
@@ -14,25 +15,57 @@ function UserProfile({ profile, refreshFunction }) {
       .then(response => { console.log(response); refreshFunction() });
   }
 
+  function saveProfile() {
+    console.log(profile);
+
+    fetch('/edit_profile', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ profile: profile })
+    }).then(response => response.json())
+    .then(response => { console.log(response); refreshFunction() });
+  }
+
   return (
     <div className='profileCell'>
       <div className='profileHeader'>
         <div className='profileName'>{profile.name}</div>
         <div className='buttonContainer'>
-          <button className='expandButton' onClick={() => { setExpanded(!expanded) }}>Expand</button>
-          <button className='deleteButton' onClick={() => { deleteUserProfile() }}>Delete</button>
+          {expanded ?
+            <>
+              <button className='expandButton' onClick={() => { saveProfile(); setExpanded(!expanded) }}>Save</button>
+              <button className='deleteButton' onClick={() => { deleteUserProfile() }}>Delete</button>
+            </>
+            :
+            <button className='expandButton' onClick={() => { setExpanded(!expanded) }}>Edit</button>
+          }
         </div>
       </div>
       {expanded ?
         <div className='profileExpanded'>
-          <strong>Age:</strong> {profile.age}<br />
-          <strong>Gender:</strong> {profile.gender}<br />
-          <strong>Job Title:</strong> {profile.job_title}<br />
-          <strong>Years of Experience:</strong> {profile.years_experience}<br />
-          <strong>Notes:</strong> {profile.notes}<br />
-          <br />
-        </div> :
-        <></>
+          <EditableForm
+            header_text={profile.name}
+            formDict={{
+              'Name': profile.name
+              , 'Age': profile.age
+              , 'Gender': profile.gender
+              , 'Job Title': profile.job_title
+              , 'Years Experience': profile.years_experience
+              , 'Notes': profile.notes
+            }}
+            saveFunction={(updatedDict) => {
+              profile.name = updatedDict['Name']
+              profile.age = updatedDict['Age']
+              profile.gender = updatedDict['Gender']
+              profile.job_title = updatedDict['Job Title']
+              profile.years_experience = updatedDict['Years Experience']
+              profile.notes = updatedDict['Notes']
+            }}
+          />
+        </div>
+        : <></>
       }
     </div>
   );
@@ -60,9 +93,16 @@ function UserProfileList() {
     fetchUserProfiles();
   }, []);
 
+  function addProfile() {
+    console.log("Adding Profile")
+  }
+
   return (
-    <div>
-      <h1>User Profiles</h1>
+    <div className='userProfilesPage'>
+      <div className='userProfilesHeader'>
+        <h1 className='userProfilesHeading'>Employee Profiles</h1>
+        <button className='addProfileButton' onClick={() => addProfile()}>+</button>
+      </div>
       {userProfiles.map((profile, index) => (
         <UserProfile profile={profile} refreshFunction={() => fetchUserProfiles()} />
       ))}

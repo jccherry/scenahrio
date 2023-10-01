@@ -33,10 +33,26 @@ body {
   bottom: 0;
   overflow-y: auto;
   color: white;
-  display: flex;
-  flex-direction: column;
+
   /* align-items: center; */
   /* justify-content: center; */
+}
+
+.SidebarContent {
+  display: flex;
+  flex-direction: column;
+  margin: 15px;
+}
+
+.userProfile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.userProfile img {
+  border-radius: 50%;
+  border: 1px solid black;
 }
 
 /* Content */
@@ -64,36 +80,54 @@ button:hover {
   transition: background-color 0.3s, color 0.3s;
 }
 
-/* Container for each edit item */
+/* Style for the editItemDiv container */
 .editItemDiv {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
+  align-items: flex-start;
+  border-bottom: 1px solid #e0e0e0; /* Very light grey underline */
+  padding: 10px 0;
 }
 
-/* Label takes up 10% */
+/* Style for the editItemLabel */
 .editItemLabel {
-  flex: 0 0 10%;
+  flex: 0 0 20%; /* Takes up exactly 20% of the width */
+  font-weight: bold;
+  color: #424242;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Input or Value takes up 85% */
-.editItemInput,
+/* Style for the buttonContainer */
+.editItemButtonContainer {
+  flex: 1; /* Takes up remaining space */
+  text-align: right; /* Fixed to the right side */
+  margin-left: 10px;
+}
+
+/* Style for the editItemValue */
 .editItemValue {
-  flex: 0 0 85%;
-  padding: 5px;
+  flex: 1; /* Takes up remaining space */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: black;
 }
 
-/* Button takes up 5% */
-.editItemButton {
-  flex: 0 0 5%;
+/* Style for the editItemInput */
+.editItemInput {
+  flex: 1; /* Takes up remaining space */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: lighter; /* Slightly lighter font */
+  color: #555; /* Lighter font color */
+  border: none; /* No visible border */
+  border-bottom: 1px solid #e0e0e0;
+  outline: none; /* Remove default focus outline */
+  margin-right: 10px;
 }
 
-/* Header and Footer styling (optional) */
-.editFormHeader,
-.editFormFooter {
-  text-align: center;
-}
 
 /* Style for the profileCell container */
 .profileCell {
@@ -111,7 +145,6 @@ button:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
 }
 
 /* Style for the profileName on the left side */
@@ -121,10 +154,39 @@ button:hover {
   margin-bottom: 0; /* Remove padding on the bottom */
 }
 
+.addProfileButton {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: xx-large;
+  background-color: #007bff;
+  color: white;
+}
+
+/* Hover effect for buttons */
+.addProfileButton:hover {
+  background-color: #1c3f63; /* Darker blue on hover */
+  color: white;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.userProfilesHeading {
+  text-align: left;
+  flex: 1;
+}
+
+.userProfilesHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: 1px solid #424242;
+}
+
 /* Style for the buttonContainer on the right side */
 .buttonContainer {
   display: flex;
   gap: 10px;
+  align-items: center;
 }
 
 /* Style for the Expand and Delete buttons */
@@ -140,7 +202,6 @@ button:hover {
 
 /* Style for the profileExpanded section at the bottom */
 .profileExpanded {
-  border-top: 1px solid #ccc; /* Add a separator line */
   padding-top: 10px;
 }
 
