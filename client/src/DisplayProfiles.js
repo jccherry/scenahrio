@@ -25,7 +25,7 @@ function UserProfile({ profile, refreshFunction }) {
       },
       body: JSON.stringify({ profile: profile })
     }).then(response => response.json())
-    .then(response => { console.log(response); refreshFunction() });
+      .then(response => { console.log(response); refreshFunction() });
   }
 
   return (
@@ -35,8 +35,8 @@ function UserProfile({ profile, refreshFunction }) {
         <div className='buttonContainer'>
           {expanded ?
             <>
-              <button className='expandButton' onClick={() => { saveProfile(); setExpanded(!expanded) }}>Save</button>
-              <button className='deleteButton' onClick={() => { deleteUserProfile() }}>Delete</button>
+              <button className='expandButton' onClick={() => { saveProfile(); setExpanded(!expanded); }}>Save</button>
+              <button className='deleteButton' onClick={() => { setExpanded(false); deleteUserProfile(); }}>Delete</button>
             </>
             :
             <button className='expandButton' onClick={() => { setExpanded(!expanded) }}>Edit</button>
@@ -46,7 +46,6 @@ function UserProfile({ profile, refreshFunction }) {
       {expanded ?
         <div className='profileExpanded'>
           <EditableForm
-            header_text={profile.name}
             formDict={{
               'Name': profile.name
               , 'Age': profile.age
@@ -73,6 +72,8 @@ function UserProfile({ profile, refreshFunction }) {
 
 function UserProfileList() {
   const [userProfiles, setUserProfiles] = useState([]);
+  const [addingNewProfile, setAddingNewProfile] = useState(false);
+  const [newProfile, setNewProfile] = useState({})
 
   // Define a function to fetch user profiles from the API
   const fetchUserProfiles = async () => {
@@ -88,13 +89,33 @@ function UserProfileList() {
     }
   };
 
+  function sendProfileToServer(profile) {
+    fetch('/add_profile', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ profile: profile }),
+    }).then(response => response.json())
+      .then(message => { console.log(message.message) })
+      .then(() => {fetchUserProfiles()});
+  }
+
   useEffect(() => {
     // Call the fetchUserProfiles function to make the API request
     fetchUserProfiles();
   }, []);
 
   function addProfile() {
-    console.log("Adding Profile")
+    setNewProfile({
+      'Name': null
+      , 'Age': null
+      , 'Gender': null
+      , 'Job Title': null
+      , 'Years Experience': null
+      , 'Notes': null
+    });
+    setAddingNewProfile(true);
   }
 
   return (
@@ -103,6 +124,28 @@ function UserProfileList() {
         <h1 className='userProfilesHeading'>Employee Profiles</h1>
         <button className='addProfileButton' onClick={() => addProfile()}>+</button>
       </div>
+      {addingNewProfile ?
+        <div className='profileCell'>
+          <EditableForm
+            header={
+              <div className='profileHeader'>
+                <h3><i>New Employee Profile</i></h3>
+                <div className='buttonContainer'>
+                  <button className='expandButton' onClick={() => { sendProfileToServer(newProfile); setAddingNewProfile(false); }}>Save</button>
+                  <button className='deleteButton' onClick={() => { setAddingNewProfile(false); }}>Cancel</button>
+                </div>
+              </div>
+            }
+            formDict={newProfile}
+            saveFunction={(updatedDict) => {
+              setNewProfile(updatedDict);
+            }}
+            initialVisibility={true}
+            autosave={true}
+          />
+        </div>
+        :
+        <></>}
       {userProfiles.map((profile, index) => (
         <UserProfile profile={profile} refreshFunction={() => fetchUserProfiles()} />
       ))}

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 // EditItem component will have a label, a value, and a edit button
 // when the edit button is pressed, the value changes to an input
 // When the edit button is pressed again, the value changes back
-function EditItem({label, value, onSaveFunction, initialVisibility=false}) {
+function EditItem({label, value, onSaveFunction, initialVisibility=false, autosave = false}) {
     const [isInputVisible, setInputVisible] = useState(initialVisibility);
     const [editInputValue, setEditInputValue] = useState(value);
 
@@ -28,6 +28,9 @@ function EditItem({label, value, onSaveFunction, initialVisibility=false}) {
     const handleInputChange = (event) => {
         //onUpdateFunction(event.target.value);
         setEditInputValue(event.target.value);
+        if (autosave) {
+            onSaveFunction(event.target.value);
+        }
     };
 
     return (
@@ -42,10 +45,12 @@ function EditItem({label, value, onSaveFunction, initialVisibility=false}) {
                         onChange={handleInputChange}
                         className="editItemInput"
                     />
-                    <div className='editItemButtonContainer'>
+                    {autosave ? <></> :
+                        <div className='editItemButtonContainer'>
                         <button onClick={handleSaveButton} className="editItemButton">Save</button>
                         <button onClick={handleCancelButton} className="editItemButton">Cancel</button>
                     </div>
+                    }
                 </div>
             ) : (
                 <div className="editItemDiv">

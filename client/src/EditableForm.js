@@ -8,6 +8,7 @@ function EditableForm({
     , footer = <></>
     , initialVisibility = false
     , saveFunction
+    , autosave = false
 }) {
 
     const [formState, setFormState] = useState(formDict);
@@ -40,7 +41,8 @@ function EditableForm({
                         label={key}
                         value={formState[key]}
                         onSaveFunction={(value) => updateFormState(key, value)}
-                        initialVisibility={false}
+                        initialVisibility={initialVisibility}
+                        autosave={autosave}
                     />
                 ))}
             </div>

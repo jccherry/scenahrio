@@ -3,8 +3,6 @@ import './App.css';
 import React, { useEffect, useState } from 'react'
 import jwt_decode from 'jwt-decode'
 
-//import EditForm from './EditForm';
-import ProfileInputForm from './ProfileInputForm';
 import SidebarItem from './SidebarItem';
 import DisplayProfiles from './DisplayProfiles';
 
@@ -149,13 +147,11 @@ function App() {
           <div class="Sidebar">
             <div class="SidebarContent">
               <UserProfile />
-              <SidebarItem label="Add Profile" onClick={() => renderComponent(<ProfileInputForm />)} />
               <SidebarItem label="Employee Profiles" onClick={() => renderComponent(<DisplayProfiles />)} />
               <SidebarItem label="Feed" onClick={() => renderComponent(<div>Feed</div>)} />
             </div>
           </div>
           <div class="Content">
-
             {isUserLoggedIn() ? (
               selectedComponent
             ) : (

@@ -100,9 +100,9 @@ button:hover {
 
 /* Style for the buttonContainer */
 .editItemButtonContainer {
-  flex: 1; /* Takes up remaining space */
-  text-align: right; /* Fixed to the right side */
-  margin-left: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
 /* Style for the editItemValue */

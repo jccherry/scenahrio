@@ -36,7 +36,7 @@ def delete_profile_from_database(profile_id):
 
 def get_user_profiles(user_sub):
     print("Getting the users's profiles")
-    return execute_query(f"SELECT * FROM profiles WHERE user_sub = '{user_sub}'")
+    return execute_query(f"SELECT * FROM profiles WHERE user_sub = '{user_sub}' ORDER BY name;")
 
 def edit_user_profile(user_profile):
     print("editing a user's employee profile")
