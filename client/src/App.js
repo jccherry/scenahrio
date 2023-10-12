@@ -5,6 +5,7 @@ import jwt_decode from 'jwt-decode'
 
 import SidebarItem from './SidebarItem';
 import DisplayProfiles from './DisplayProfiles';
+import Scenarios from './Scenarios';
 
 function App() {
   const [user, setUser] = useState({});
@@ -148,7 +149,7 @@ function App() {
             <div class="SidebarContent">
               <UserProfile />
               <SidebarItem label="Employee Profiles" onClick={() => renderComponent(<DisplayProfiles />)} />
-              <SidebarItem label="Feed" onClick={() => renderComponent(<div>Feed</div>)} />
+              <SidebarItem label="Scenarios" onClick={() => renderComponent(<Scenarios />)} />
             </div>
           </div>
           <div class="Content">

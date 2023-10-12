@@ -210,3 +210,76 @@ button:hover {
   font-weight: bold;
 }
 
+/* Style for the tree nodes */
+.tree_node {
+  margin-left: 20px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column; /* Stack child elements vertically */
+}
+
+/* Style for the tree node headers */
+.tree_node_header {
+  display:flex;
+  flex-direction: row;
+  font-weight: bold;
+  font-size: 18px; /* Adjust the font size as needed */
+  margin-bottom: 0; /* Remove padding on the bottom */
+  color: #333; /* Dark text color */
+  padding: 10px;
+  background-color: #fff; /* White background */
+  border: 1px solid #ccc; /* Add a border to the header */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for a modern look */
+}
+
+.tree_node_button_container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  margin: 5px;
+}
+
+/* Style for the buttons inside the tree nodes */
+.tree_node_button_container button {
+  background-color: #007bff; /* Button background color */
+  color: white; /* Button text color */
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* Hover effect for tree node buttons */
+.tree_node_button_container button:hover {
+  background-color: #1c3f63; /* Darker blue on hover */
+  transition: background-color 0.3s;
+  color: white;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+
+/*
+.tree_node {
+  position: relative;
+}
+
+.tree_node::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -10px; 
+  width: 10px;
+  border-left: 2px solid #000;
+}
+
+.tree_node_header {
+  background-color: #f0f0f0;
+  padding: 4px 8px;
+  border: 1px solid #000;
+  display: inline-block;
+}
+*/
+
