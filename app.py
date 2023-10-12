@@ -58,6 +58,17 @@ def edit_profile():
     edit_user_profile(profile_json)
     return jsonify({"message": "Profile updated"})
 
+@app.route('/add_nodes_to_tree', methods=['POST'])
+def add_nodes_to_tree():
+    messages = request.json.get('messages')
+    print(messages)
+    return jsonify({
+        "messages": [
+            "Test 1"
+            , "Test 2"
+            , "Test 3"
+        ]})
+
 @app.route('/')
 def index():
     return app.send_static_file('index.html')

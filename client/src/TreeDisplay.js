@@ -17,7 +17,6 @@ function TreeDisplay({ node, onAddChild, onDeleteNode }) {
                     {node.children.map((child, index) => {
                         return (
                             <TreeDisplay
-                                key={index}
                                 node={child}
                                 onAddChild={onAddChild}
                                 onDeleteNode={onDeleteNode}

@@ -3,85 +3,51 @@ import TreeDisplay from "./TreeDisplay";
 
 const sampleTree = {
     message: "Root",
-    children: [
-        {
-            message: "Node 1",
-            children: [
-                {
-                    message: "Node 1.1",
-                    children: [
-                        {
-                            message: "Node 1.1.1",
-                            children: [
-                                {
-                                    message: "Node 1.1.1.1",
-                                    children: [],
-                                },
-                            ],
-                        },
-                    ],
-                },
-            ],
-        },
-        {
-            message: "Node 2",
-            children: [],
-        },
-        {
-            message: "Node 3",
-            children: [
-                {
-                    message: "Node 3.1",
-                    children: [],
-                },
-                {
-                    message: "Node 3.2",
-                    children: [],
-                },
-            ],
-        },
-    ],
+    selected: true,
+    children: []
 };
-
 
 function Scenarios() {
     const [tree, setTree] = useState(sampleTree);
 
-    const handleAddChild = (parentNode) => {
-
-        console.log(tree);
-
-        // Create a new child node
-        const newChild = {
-            message: `New Node ${Math.random()}`,
-            render_children: true,
-            selected: true,
-            children: [],
-        };
-
-        // Find the parent node's level (assuming all nodes have a 'level' property)
-        const parentLevel = parentNode.level;
-
-        // Unselect children at the same level as the parent
-        const unselectChildrenAtSameLevel = (node) => {
-            if (node.level === parentLevel) {
-                node.selected = false;
-            }
-            if (node.children && node.children.length > 0) {
-                node.children.forEach(unselectChildrenAtSameLevel);
-            }
-        };
-
-        // Apply the unselection to all other nodes at the same level
-        unselectChildrenAtSameLevel(tree);
-
-        // Add the new child to the parent's children
-        parentNode.children.push(newChild);
-
-        // Trigger re-render
-        setTree({ ...tree });
+    const concatenateMessagesToRoot = (node) => {
+        if (!node.parent) {
+            return [node.message];
+        } else {
+            return concatenateMessagesToRoot(node.parent).concat([node.message]);
+        }
     };
 
+    const handleAddChild = (parentNode) => {
+        const messages = concatenateMessagesToRoot(parentNode);
+
+        const createNewChild = (message) => {
+            // Create a new child node
+            const newChild = {
+                message: message,
+                selected: true,
+                children: [],
+                parent: parentNode
+            };
+
+            // Add the new child to the parent's children
+            parentNode.children.push(newChild);
+        }
+
+        fetch('/add_nodes_to_tree', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ messages: messages }),
+        }).then(response => response.json())
+            .then(response => {
+                response.messages.map((message) => {
+                    createNewChild(message);
+                });
+                setTree({ ...tree });
+            });
+    };
 
     const handleDeleteNode = (nodeToDelete) => {
         const removeNode = (nodes, node) => {

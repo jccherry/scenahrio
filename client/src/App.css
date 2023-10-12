@@ -259,27 +259,3 @@ button:hover {
   cursor: pointer;
   border-radius: 5px;
 }
-
-
-/*
-.tree_node {
-  position: relative;
-}
-
-.tree_node::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -10px; 
-  width: 10px;
-  border-left: 2px solid #000;
-}
-
-.tree_node_header {
-  background-color: #f0f0f0;
-  padding: 4px 8px;
-  border: 1px solid #000;
-  display: inline-block;
-}
-*/
-
