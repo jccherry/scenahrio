@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import EditableForm from './EditableForm';
+import Modal from './Modal';
 
 function UserProfile({ profile, refreshFunction }) {
   const [expanded, setExpanded] = useState(false)
@@ -72,8 +73,14 @@ function UserProfile({ profile, refreshFunction }) {
 
 function UserProfileList() {
   const [userProfiles, setUserProfiles] = useState([]);
-  const [addingNewProfile, setAddingNewProfile] = useState(false);
-  const [newProfile, setNewProfile] = useState({})
+  const [newProfile, setNewProfile] = useState({
+    'Name': null
+    , 'Age': null
+    , 'Gender': null
+    , 'Job Title': null
+    , 'Years Experience': null
+    , 'Notes': null
+  })
 
   // Define a function to fetch user profiles from the API
   const fetchUserProfiles = async () => {
@@ -91,14 +98,14 @@ function UserProfileList() {
 
   function sendProfileToServer(profile) {
     fetch('/add_profile', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ profile: profile }),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ profile: profile }),
     }).then(response => response.json())
       .then(message => { console.log(message.message) })
-      .then(() => {fetchUserProfiles()});
+      .then(() => { fetchUserProfiles() });
   }
 
   useEffect(() => {
@@ -115,8 +122,24 @@ function UserProfileList() {
       , 'Years Experience': null
       , 'Notes': null
     });
-    setAddingNewProfile(true);
+    setIsModalOpen(true);
   }
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  useEffect(() => {
+    if (newProfile !== null && isModalOpen) {
+      openModal();
+    }
+  }, [newProfile]);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <div className='userProfilesPage'>
@@ -124,15 +147,15 @@ function UserProfileList() {
         <h1 className='userProfilesHeading'>Employee Profiles</h1>
         <button className='addProfileButton' onClick={() => addProfile()}>+</button>
       </div>
-      {addingNewProfile ?
+      <Modal isOpen={isModalOpen} onClose={closeModal} displayCloseButton={false}>
         <div className='profileCell'>
           <EditableForm
             header={
               <div className='profileHeader'>
-                <h3><i>New Employee Profile</i></h3>
+                <h3>New Employee Profile</h3>
                 <div className='buttonContainer'>
-                  <button className='expandButton' onClick={() => { sendProfileToServer(newProfile); setAddingNewProfile(false); }}>Save</button>
-                  <button className='deleteButton' onClick={() => { setAddingNewProfile(false); }}>Cancel</button>
+                  <button className='expandButton' onClick={() => { sendProfileToServer(newProfile); closeModal(); }}>Save</button>
+                  <button className='deleteButton' onClick={() => { closeModal(); }}>Cancel</button>
                 </div>
               </div>
             }
@@ -144,8 +167,7 @@ function UserProfileList() {
             autosave={true}
           />
         </div>
-        :
-        <></>}
+      </Modal>
       {userProfiles.map((profile, index) => (
         <UserProfile profile={profile} refreshFunction={() => fetchUserProfiles()} />
       ))}
