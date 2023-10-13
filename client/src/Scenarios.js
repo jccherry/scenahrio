@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import TreeDisplay from "./TreeDisplay";
+import ProfileSelector from "./ProfileSelector";
 
 const sampleTree = {
     message: "Root",
@@ -47,6 +48,10 @@ function Scenarios() {
                 });
                 setTree({ ...tree });
             });
+        // Next steps, get the single scenario to store in database
+        // Then expand on that scenario's capability
+        // Ie, assign a user to it, get messages alternating, then finally
+        // integrate the GPT API
     };
 
     const handleDeleteNode = (nodeToDelete) => {
@@ -67,8 +72,13 @@ function Scenarios() {
     };
 
     return (
-        <>
-            <div className="scenariosHeader">Scenarios</div>
+        <div className="scenariosPage">
+            <div className="scenariosHeader">
+                <h1 className="scenariosHeading">Scenarios</h1>
+            </div>
+            <div className="userSelector">
+                <ProfileSelector handleProfileSelection={(object) => {console.log(object);}} />
+            </div>
             <div className="tree">
                 <TreeDisplay
                     node={tree}
@@ -76,7 +86,7 @@ function Scenarios() {
                     onDeleteNode={handleDeleteNode}
                 />
             </div>
-        </>
+        </div>
     );
 }
 

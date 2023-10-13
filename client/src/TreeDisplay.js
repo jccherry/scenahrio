@@ -13,7 +13,7 @@ function TreeDisplay({ node, onAddChild, onDeleteNode }) {
                 </div>
             </div>
             {node.children && node.children.length > 0 && (
-                <div style={{ marginLeft: "20px" }}>
+                <>
                     {node.children.map((child, index) => {
                         return (
                             <TreeDisplay
@@ -23,7 +23,7 @@ function TreeDisplay({ node, onAddChild, onDeleteNode }) {
                             />
                         );
                     })}
-                </div>
+                </>
             )}
         </div>
     );

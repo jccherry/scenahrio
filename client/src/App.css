@@ -170,12 +170,12 @@ button:hover {
   transition: background-color 0.3s, color 0.3s;
 }
 
-.userProfilesHeading {
+.userProfilesHeading, .scehariosHeading {
   text-align: left;
   flex: 1;
 }
 
-.userProfilesHeader {
+.userProfilesHeader, .scenariosHeader {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -221,6 +221,7 @@ button:hover {
 /* Style for the tree node headers */
 .tree_node_header {
   display:flex;
+  align-items: center;
   flex-direction: row;
   font-weight: bold;
   font-size: 18px; /* Adjust the font size as needed */
@@ -238,6 +239,7 @@ button:hover {
   gap: 10px;
   align-items: center;
   margin: 5px;
+  margin-left: auto;
 }
 
 /* Style for the buttons inside the tree nodes */
@@ -258,4 +260,17 @@ button:hover {
   padding: 5px 10px;
   cursor: pointer;
   border-radius: 5px;
+}
+
+.dropdown {
+  width: 250px;
+}
+
+.dropdownItems {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdownButton {
+  width: 100%;
 }
