@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import TreeDisplay from "./TreeDisplay";
-import ProfileSelector from "./ProfileSelector";
+import ScenarioSelector from "./ScenarioSelector";
+import Modal from "./Modal";
 
 const sampleTree = {
     message: "Root",
@@ -71,14 +72,25 @@ function Scenarios() {
         setTree({ ...tree }); // Trigger re-render
     };
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = () => {
+      setIsModalOpen(true);
+    };
+  
+    const closeModal = () => {
+      setIsModalOpen(false);
+    };
+
     return (
         <div className="scenariosPage">
             <div className="scenariosHeader">
                 <h1 className="scenariosHeading">Scenarios</h1>
+                <button className='addProfileButton' onClick={() => {openModal();}}>+</button>
             </div>
-            <div className="userSelector">
-                <ProfileSelector handleProfileSelection={(object) => {console.log(object);}} />
-            </div>
+            <Modal isOpen={isModalOpen} onClose={closeModal} displayCloseButton={false}>
+                <ScenarioSelector submitCallback={(object) => {closeModal(); console.log(object);}}/>
+            </Modal>
             <div className="tree">
                 <TreeDisplay
                     node={tree}

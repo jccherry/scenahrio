@@ -140,11 +140,10 @@ button:hover {
   flex-direction: column; /* Stack child elements vertically */
 }
 
-/* Style for the profileHeader */
-.profileHeader {
+.scenariosHeader, .profileHeader {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  flex-direction: row;
 }
 
 /* Style for the profileName on the left side */
@@ -161,6 +160,7 @@ button:hover {
   font-size: xx-large;
   background-color: #007bff;
   color: white;
+  margin-left: auto;
 }
 
 /* Hover effect for buttons */
@@ -187,6 +187,7 @@ button:hover {
   display: flex;
   gap: 10px;
   align-items: center;
+  margin-left: auto;
 }
 
 /* Style for the Expand and Delete buttons */
@@ -262,15 +263,83 @@ button:hover {
   border-radius: 5px;
 }
 
-.dropdown {
-  width: 250px;
-}
-
-.dropdownItems {
+/* Style for the scenarioSelector container */
+.scenarioSelector {
+  margin-top: 10px;
+  background-color: #fff; /* White background */
+  padding: 20px; /* Add some padding around the content */
+  border: 1px solid #ccc; /* Add a slim border */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for a modern look */
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Stack child elements vertically */
 }
 
+/* Style for scenarioSelectorItem */
+.scenarioSelectorItem {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px; /* Add space between items */
+}
+
+/* Style for scenarioSelectorLabel */
+.scenarioSelectorLabel {
+  flex: 0 0 30%; /* Takes up 30% of the width */
+  font-weight: bold;
+  color: #424242; /* Dark text color */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 10px; /* Add space between label and input */
+}
+
+/* Style for scenarioSelectorInput and scenarioSelectorTextArea */
+.scenarioSelectorInput,
+.scenarioSelectorTextArea {
+  flex: 1; /* Takes up the remaining space */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: 1px solid #e0e0e0; /* Add a light grey border */
+  padding: 5px;
+  outline: none; /* Remove default focus outline */
+}
+
+/* Style for the dropdown container */
+.dropdown {
+  width: 175px;
+  position: relative; /* Make it relative for absolute positioning of dropdownItems */
+}
+
+/* Style for the dropdown button */
 .dropdownButton {
   width: 100%;
+  background-color: #007bff; /* Button background color */
+  color: white; /* Button text color */
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s; /* Add a button hover effect */
+}
+
+/* Hover effect for the dropdown button */
+.dropdownButton:hover {
+  background-color: #1c3f63; /* Darker blue on hover */
+}
+
+/* Style for the dropdown items */
+.dropdownItems {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  width: 175px;
+  background-color: #fff; /* White background for items */
+  border: 1px solid #ccc; /* Add a slim border */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for a modern look */
+  z-index: 1; /* Ensure the dropdown is displayed above other elements */
+}
+
+/* Show dropdownItems when hovering over the dropdown container */
+.dropdown:hover .dropdownItems {
+  display: flex;
 }
