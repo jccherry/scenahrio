@@ -58,6 +58,14 @@ def edit_profile():
     edit_user_profile(profile_json)
     return jsonify({"message": "Profile updated"})
 
+@app.route('/create_scenario', methods=['POST'])
+def create_scenario():
+    scenario_json = request.json.get('scenario')
+    #print(scenario_json)
+    add_scenario_to_database(scenario_json=scenario_json, user_sub=session['user']['sub'])
+    return jsonify({"message": "Scenario Uploaded"})
+
+
 @app.route('/add_nodes_to_tree', methods=['POST'])
 def add_nodes_to_tree():
     messages = request.json.get('messages')

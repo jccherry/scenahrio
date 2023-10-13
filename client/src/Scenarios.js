@@ -82,6 +82,20 @@ function Scenarios() {
       setIsModalOpen(false);
     };
 
+    const uploadScenario = async (scenario) => {
+        console.log('Scenario upload async');
+        fetch('/create_scenario', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ scenario: scenario }),
+        }).then(response => response.json())
+            .then(response => {
+                console.log(response);
+            });
+    };
+
     return (
         <div className="scenariosPage">
             <div className="scenariosHeader">
@@ -89,7 +103,7 @@ function Scenarios() {
                 <button className='addProfileButton' onClick={() => {openModal();}}>+</button>
             </div>
             <Modal isOpen={isModalOpen} onClose={closeModal} displayCloseButton={false}>
-                <ScenarioSelector submitCallback={(object) => {closeModal(); console.log(object);}}/>
+                <ScenarioSelector submitCallback={(scenario) => {closeModal(); uploadScenario(scenario);}}/>
             </Modal>
             <div className="tree">
                 <TreeDisplay

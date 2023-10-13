@@ -4,6 +4,12 @@ import re
 import hashlib
 import datetime
 
+# create a unique ID by hashing
+def create_id_hash(string_to_hash):
+    id_to_hash = f"string_to_hash{datetime.datetime.now()}"
+    unique_id = hashlib.sha256(id_to_hash.encode()).hexdigest()
+    return unique_id
+
 # Add a user to the database if they don't exist already
 def add_user_to_database(user_json):
 
@@ -19,9 +25,9 @@ def add_user_to_database(user_json):
 
 def add_profile_to_database(profile_json, user_sub):
     print(profile_json)
-    id_to_hash = f"{user_sub}{profile_json['Name']}{datetime.datetime.now()}"
-    print(f"id_to_hash = {id_to_hash}")
-    unique_id = hashlib.sha256(id_to_hash.encode()).hexdigest()
+
+    string_to_hash = f"{user_sub}{profile_json['Name']}"
+    unique_id = create_id_hash(string_to_hash)
 
     print(profile_json)
     profile_df = dict_to_dataframe(profile_json, normalize_headers=True)
@@ -77,3 +83,23 @@ def dict_to_dataframe(dict_data, normalize_headers=False):
     # Create a DataFrame with a single row using a list comprehension
     #df = pd.DataFrame(data, columns=column_names)
     return df
+
+def add_scenario_to_database(scenario_json, user_sub):
+    print(scenario_json)
+    
+    profile_id = scenario_json['employee']['profile_id']
+    id_to_hash = f"{profile_id}{user_sub}__scenario"
+    scenario_id = create_id_hash(id_to_hash)
+
+    insert_dict = {
+        'user_sub': user_sub
+        , 'scenario_id': scenario_id
+        , 'profile_id': profile_id
+        , 'contents' : '{}'
+    }
+
+    insert_dataframe_into_table(dict_to_dataframe(insert_dict), 'scenarios')
+
+    print(insert_dict)
+
+    
