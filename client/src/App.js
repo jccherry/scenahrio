@@ -5,7 +5,9 @@ import jwt_decode from 'jwt-decode'
 import SidebarItem from './components/SidebarItem';
 import DisplayProfiles from './components/DisplayProfiles';
 import Scenarios from './components/Scenarios';
-import ProfileDropdownMenu from './components/ProfileDropdownMenu';
+import LoginView from './components/LoginView';
+
+import light_logo from './assets/images/light_logo.png';
 
 function App() {
   const [user, setUser] = useState({});
@@ -117,16 +119,11 @@ function App() {
     // if the user has a name, it exists and a user is logged in
     return (
       <>
-        <div id='signInDiv'></div>
         {user &&
           <div className='userProfile'>
             <img src={user.picture}></img>
             <h3>{user.name}</h3>
-            <p>{user.email}</p>
           </div>
-        }
-        {isUserLoggedIn() &&
-          <button onClick={() => handleSignOut()}>Sign Out</button>
         }
       </>
     );
@@ -143,27 +140,35 @@ function App() {
   return (
     <>
       <div className="App">
-        <div className="Header">
-          <div className="titleDiv">Scenahr.io</div>
-        </div>
-        <div class="Main">
-          <div class="Sidebar">
-            <div class="SidebarContent">
-              <UserProfile />
-              <SidebarItem label="Employee Profiles" onClick={() => renderComponent(<DisplayProfiles />)} />
-              <SidebarItem label="Scenarios" onClick={() => renderComponent(<Scenarios />)} />
+        {!isUserLoggedIn() ?
+          <LoginView />
+          :
+          <>
+            <div className="Header">
+              <div className="titleDiv">
+                <img src={light_logo} style={{height: '100px'}}></img>
+              </div>
             </div>
-          </div>
-          <div class="Content">
-            {isUserLoggedIn() ? (
-              <>
-                {selectedComponent}
-              </>
-            ) : (
-              <div>Please log in to access this content.</div>
-            )}
-          </div>
-        </div>
+            <div className="Main">
+              <div className="Sidebar">
+                <div className="SidebarContent">
+                  <UserProfile />
+                  <SidebarItem label="Employee Profiles" onClick={() => renderComponent(<DisplayProfiles />)} />
+                  <SidebarItem label="Scenarios" onClick={() => renderComponent(<Scenarios />)} />
+                </div>
+                <div className="SidebarBottom">
+                  <SidebarItem label="Log Out" onClick={() => handleSignOut()} />
+                </div>
+              </div>
+              <div className="Content">
+                {isUserLoggedIn() &&
+                  <>
+                    {selectedComponent}
+                  </>}
+              </div>
+            </div>
+          </>
+        }
       </div>
     </>
   );

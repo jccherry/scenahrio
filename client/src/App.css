@@ -41,7 +41,34 @@ body {
 .SidebarContent {
   display: flex;
   flex-direction: column;
-  margin: 15px;
+  padding-top: 10px;
+  align-items: center;
+}
+
+.sidebarButton {
+  width: 95%;
+  color: #fff;
+  height: 30px;
+  font-size: 18px;
+  background-color: #385b7c;
+  text-align: center;
+  border: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+.sidebarItem {
+  text-align: center;
+  width: 100%;
+}
+
+/* Hover effect for buttons */
+.sidebarButton:hover {
+  background-color: #1c3f63; /* Darker blue on hover */
+  transition: background-color 0.3s, color 0.3s;
+  border-radius: 5px;
 }
 
 .userProfile {
@@ -71,13 +98,6 @@ body {
 .Sidebar,
 .Content {
   font-family: "Roboto", sans-serif; /* Replace with your preferred modern font */
-}
-
-/* Hover effect for buttons */
-button:hover {
-  background-color: #1c3f63; /* Darker blue on hover */
-  color: white;
-  transition: background-color 0.3s, color 0.3s;
 }
 
 /* Style for the editItemDiv container */
@@ -342,4 +362,29 @@ button:hover {
 /* Show dropdownItems when hovering over the dropdown container */
 .dropdown:hover .dropdownItems {
   display: flex;
+}
+
+.loginView {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+}
+
+.signInOptions {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for a modern look */
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 15px;
+}
+
+.SidebarBottom {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
 }

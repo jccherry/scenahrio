@@ -6,3 +6,6 @@ client/src/.DS_STORE
 client/build
 python_modules/__pycache__
 __pycache__
+client/src/assets/.DS_STORE
+client/.DS_STORE
+.DS_STORE
