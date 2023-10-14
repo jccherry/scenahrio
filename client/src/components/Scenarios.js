@@ -3,6 +3,8 @@ import TreeDisplay from "./TreeDisplay";
 import ScenarioSelector from "./ScenarioSelector";
 import Modal from "./Modal";
 
+import plus_button from '../assets/images/plus_button.png';
+
 const sampleTree = {
     message: "Root",
     selected: true,
@@ -100,7 +102,9 @@ function Scenarios() {
         <div className="scenariosPage">
             <div className="scenariosHeader">
                 <h1 className="scenariosHeading">Scenarios</h1>
-                <button className='addProfileButton' onClick={() => {openModal();}}>+</button>
+                <button className='addProfileButton' onClick={() => {openModal();}}>
+                    <img src={plus_button} style={{height: '50%'}}></img>
+                </button>
             </div>
             <Modal isOpen={isModalOpen} onClose={closeModal} displayCloseButton={false}>
                 <ScenarioSelector submitCallback={(scenario) => {closeModal(); uploadScenario(scenario);}}/>

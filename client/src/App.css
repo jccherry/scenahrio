@@ -52,11 +52,13 @@ body {
   font-size: 18px;
   background-color: #385b7c;
   text-align: center;
+  vertical-align: center;
   border: none;
 }
 
 button {
   cursor: pointer;
+  vertical-align: center;
 }
 
 .sidebarItem {
@@ -177,10 +179,14 @@ button {
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  font-size: xx-large;
+  font-size: 35px;
   background-color: #007bff;
   color: white;
   margin-left: auto;
+  border: 2px solid #424242;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Hover effect for buttons */
@@ -387,4 +393,24 @@ button {
   position: absolute;
   width: 100%;
   bottom: 0;
+}
+
+.defaultSvgButton {
+  fill: #007bff;
+  width: 100%;
+  height: 100%;
+}
+
+.hoveredSvgButton {
+  fill: #385b7c;
+  width: 100%;
+  height: 100%;
+}
+
+.componentButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
 }

@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import EditableForm from './EditableForm';
 import Modal from './Modal';
+import ComponentButton from './ComponentButton';
+
+import plus_button from '../assets/images/plus_button.png';
+import { ReactComponent as PencilIcon } from '../assets/icons/pencil.svg';
+import { ReactComponent as FilledPencilIcon } from '../assets/icons/pencil-fill.svg';
+import { ReactComponent as TrashIcon } from '../assets/icons/trash.svg';
+import { ReactComponent as FilledTrashIcon } from '../assets/icons/trash-fill.svg';
+import { ReactComponent as CheckIcon } from '../assets/icons/check-square.svg';
+import { ReactComponent as FilledCheckIcon } from '../assets/icons/check-square-fill.svg';
+
 
 function UserProfile({ profile, refreshFunction }) {
   const [expanded, setExpanded] = useState(false)
@@ -36,11 +46,31 @@ function UserProfile({ profile, refreshFunction }) {
         <div className='buttonContainer'>
           {expanded ?
             <>
-              <button className='expandButton' onClick={() => { saveProfile(); setExpanded(!expanded); }}>Save</button>
-              <button className='deleteButton' onClick={() => { setExpanded(false); deleteUserProfile(); }}>Delete</button>
+              <ComponentButton
+                defaultComponent={<TrashIcon className='defaultSvgButton' />}
+                hoverComponent={<FilledTrashIcon className='hoveredSvgButton' />}
+                onClick={() => { setExpanded(false); deleteUserProfile(); }}
+              />
+              <ComponentButton
+                defaultComponent={<CheckIcon className='defaultSvgButton' />}
+                hoverComponent={<FilledCheckIcon className='hoveredSvgButton' />}
+                onClick={() => { saveProfile(); setExpanded(!expanded); }}
+              />
+              {
+              //<button className='expandButton' onClick={() => { saveProfile(); setExpanded(!expanded); }}>Save</button>
+              //<button className='deleteButton' onClick={() => { setExpanded(false); deleteUserProfile(); }}>Delete</button>
+              }   
             </>
             :
-            <button className='expandButton' onClick={() => { setExpanded(!expanded) }}>Edit</button>
+            <>
+              <ComponentButton
+                defaultComponent={<PencilIcon className='defaultSvgButton' />}
+                hoverComponent={<FilledPencilIcon className='hoveredSvgButton' />}
+                onClick={() => { setExpanded(!expanded) }}
+              />
+              { //<button className='expandButton' onClick={() => { setExpanded(!expanded) }}>Edit</button> 
+              }
+            </>          
           }
         </div>
       </div>
@@ -63,6 +93,8 @@ function UserProfile({ profile, refreshFunction }) {
               profile.years_experience = updatedDict['Years Experience']
               profile.notes = updatedDict['Notes']
             }}
+            initialVisibility={true}
+            autosave={true}
           />
         </div>
         : <></>
@@ -145,7 +177,9 @@ function UserProfileList() {
     <div className='userProfilesPage'>
       <div className='userProfilesHeader'>
         <h1 className='userProfilesHeading'>Employee Profiles</h1>
-        <button className='addProfileButton' onClick={() => addProfile()}>+</button>
+        <button className='addProfileButton' onClick={() => addProfile()}>
+          <img src={plus_button} style={{height: '50%'}}></img>
+        </button>
       </div>
       <Modal isOpen={isModalOpen} onClose={closeModal} displayCloseButton={false}>
         <div className='profileCell'>

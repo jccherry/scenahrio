@@ -2,11 +2,13 @@ import './App.css';
 import React, { useEffect, useState } from 'react'
 import jwt_decode from 'jwt-decode'
 
+// Components
 import SidebarItem from './components/SidebarItem';
 import DisplayProfiles from './components/DisplayProfiles';
 import Scenarios from './components/Scenarios';
 import LoginView from './components/LoginView';
 
+// Images
 import light_logo from './assets/images/light_logo.png';
 
 function App() {
@@ -138,39 +140,37 @@ function App() {
   };
 
   return (
-    <>
-      <div className="App">
-        {!isUserLoggedIn() ?
-          <LoginView />
-          :
-          <>
-            <div className="Header">
-              <div className="titleDiv">
-                <img src={light_logo} style={{height: '100px'}}></img>
+    <div className="App">
+      {!isUserLoggedIn() ?
+        <LoginView />
+        :
+        <>
+          <div className="Header">
+            <div className="titleDiv">
+              <img src={light_logo} style={{ height: '100px' }}></img>
+            </div>
+          </div>
+          <div className="Main">
+            <div className="Sidebar">
+              <div className="SidebarContent">
+                <UserProfile />
+                <SidebarItem label="Employee Profiles" onClick={() => renderComponent(<DisplayProfiles />)} />
+                <SidebarItem label="Scenarios" onClick={() => renderComponent(<Scenarios />)} />
+              </div>
+              <div className="SidebarBottom">
+                <SidebarItem label="Log Out" onClick={() => handleSignOut()} />
               </div>
             </div>
-            <div className="Main">
-              <div className="Sidebar">
-                <div className="SidebarContent">
-                  <UserProfile />
-                  <SidebarItem label="Employee Profiles" onClick={() => renderComponent(<DisplayProfiles />)} />
-                  <SidebarItem label="Scenarios" onClick={() => renderComponent(<Scenarios />)} />
-                </div>
-                <div className="SidebarBottom">
-                  <SidebarItem label="Log Out" onClick={() => handleSignOut()} />
-                </div>
-              </div>
-              <div className="Content">
-                {isUserLoggedIn() &&
-                  <>
-                    {selectedComponent}
-                  </>}
-              </div>
+            <div className="Content">
+              {isUserLoggedIn() &&
+                <>
+                  {selectedComponent}
+                </>}
             </div>
-          </>
-        }
-      </div>
-    </>
+          </div>
+        </>
+      }
+    </div>
   );
 }
 
