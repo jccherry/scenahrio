@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import React, { useEffect, useState } from 'react'
 import jwt_decode from 'jwt-decode'
@@ -6,6 +5,7 @@ import jwt_decode from 'jwt-decode'
 import SidebarItem from './SidebarItem';
 import DisplayProfiles from './DisplayProfiles';
 import Scenarios from './Scenarios';
+import ProfileDropdownMenu from './ProfileDropdownMenu';
 
 function App() {
   const [user, setUser] = useState({});
@@ -132,7 +132,11 @@ function App() {
     );
   }
 
-  const [selectedComponent, setSelectedComponent] = useState(<div>Test</div>);
+  const [selectedObject, setSelectedObject] = useState(null);
+
+  const [selectedComponent, setSelectedComponent] = useState(
+    <></>
+  );
 
   const renderComponent = (component) => {
     setSelectedComponent(component);
@@ -153,8 +157,23 @@ function App() {
             </div>
           </div>
           <div class="Content">
+            { true &&
+              <>
+              <ProfileDropdownMenu profileSelectionHandler={(object) => {setSelectedObject(object);}} />
+              {selectedObject &&
+                <div>
+                  <p><b>Name: </b>{selectedObject.name}</p>
+                  <p><b>Age: </b>{selectedObject.age}</p>
+                  <p><b>Years Experience: </b>{selectedObject.years_experience}</p>
+                  <p><b>Job Title: </b>{selectedObject.job_title}</p>
+                </div>
+              }
+              </>
+            }
             {isUserLoggedIn() ? (
-              selectedComponent
+              <>
+                {selectedComponent}
+              </>
             ) : (
               <div>Please log in to access this content.</div>
             )}

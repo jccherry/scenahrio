@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
-import ProfileSelector from "./ProfileSelector";
+import ProfileDropdownMenu from './ProfileDropdownMenu';
 
 function ScenarioSelector({
     submitCallback
 }) {
 
     const [name, setName] = useState(null);
-    const [employee, setEmployee] = useState({});
+    const [employee, setEmployee] = useState(null);
     const [desiredOutcome, setDesiredOutcome] = useState(null);
     const [context, setContext] = useState(null);
 
@@ -30,8 +30,10 @@ function ScenarioSelector({
             </div>
             <div className="scenarioSelectorItem">
                 <div className="scenarioSelectorLabel">Employee:</div>
-                <ProfileSelector handleProfileSelection={(employee) => { setEmployee(employee); }} />
-            </div>
+                <ProfileDropdownMenu
+                    profileSelectionHandler={(employee) => {setEmployee(employee); }} 
+                />
+                </div>
             <div className="scenarioSelectorItem">
                 <div className="scenarioSelectorLabel">Desired Outcome:</div>
                 <input className="scenarioSelectorInput" onChange={handleOutcomeChange} value={desiredOutcome}></input>
@@ -50,6 +52,9 @@ function ScenarioSelector({
                             , desiredOutcome: desiredOutcome
                             , context: context
                         });
+                        setName('');
+                        setContext('');
+                        setDesiredOutcome('');
                     }}
                 >
                     Create Scenario
