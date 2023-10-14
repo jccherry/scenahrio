@@ -24,8 +24,8 @@ function Modal({ isOpen, onClose, displayCloseButton = true, children }) {
   };
 
   return (
-    <div style={modalStyle}>
-      <div style={modalContentStyle}>
+    <div className='modalBg' style={modalStyle}>
+      <div className='modalContents' style={modalContentStyle}>
         {displayCloseButton && 
             <button onClick={onClose}>X</button>
         }

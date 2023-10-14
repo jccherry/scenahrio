@@ -2,10 +2,10 @@ import './App.css';
 import React, { useEffect, useState } from 'react'
 import jwt_decode from 'jwt-decode'
 
-import SidebarItem from './SidebarItem';
-import DisplayProfiles from './DisplayProfiles';
-import Scenarios from './Scenarios';
-import ProfileDropdownMenu from './ProfileDropdownMenu';
+import SidebarItem from './components/SidebarItem';
+import DisplayProfiles from './components/DisplayProfiles';
+import Scenarios from './components/Scenarios';
+import ProfileDropdownMenu from './components/ProfileDropdownMenu';
 
 function App() {
   const [user, setUser] = useState({});
@@ -132,8 +132,6 @@ function App() {
     );
   }
 
-  const [selectedObject, setSelectedObject] = useState(null);
-
   const [selectedComponent, setSelectedComponent] = useState(
     <></>
   );
@@ -157,19 +155,6 @@ function App() {
             </div>
           </div>
           <div class="Content">
-            { true &&
-              <>
-              <ProfileDropdownMenu profileSelectionHandler={(object) => {setSelectedObject(object);}} />
-              {selectedObject &&
-                <div>
-                  <p><b>Name: </b>{selectedObject.name}</p>
-                  <p><b>Age: </b>{selectedObject.age}</p>
-                  <p><b>Years Experience: </b>{selectedObject.years_experience}</p>
-                  <p><b>Job Title: </b>{selectedObject.job_title}</p>
-                </div>
-              }
-              </>
-            }
             {isUserLoggedIn() ? (
               <>
                 {selectedComponent}
