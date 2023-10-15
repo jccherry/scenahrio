@@ -115,7 +115,7 @@ button {
 
 
 /* Style for the profileCell container */
-.profileCell {
+.profileCell, .scenarioCell {
   border: 1px solid #ccc; /* Add a slim border */
   padding: 10px;
   margin: 10px;
@@ -125,14 +125,14 @@ button {
   flex-direction: column; /* Stack child elements vertically */
 }
 
-.scenariosHeader, .profileHeader {
+.scenariosHeader, .profileHeader, .scenarioCellHeader {
   display: flex;
   align-items: center;
   flex-direction: row;
 }
 
 /* Style for the profileName on the left side */
-.profileName {
+.profileName, .scenarioName {
   font-weight: bold;
   font-size: 18px; /* Adjust the font size as needed */
   margin-bottom: 0; /* Remove padding on the bottom */
@@ -502,4 +502,18 @@ iframe {
   border: none;
   border-radius: 10px;
   width: 639;
+}
+
+.slider {
+  position: absolute;
+  top: 56px;
+  right: -100%; /* Initially hidden to the right */
+  width: 100%;
+  bottom:0;
+  background-color: #fff; /* Set the background color you want */
+  transition: right 0.3s ease; /* Add a transition for a smooth slide-in effect */
+}
+
+.slider.visible {
+  right: 0; /* Slide in to cover the entire div */
 }

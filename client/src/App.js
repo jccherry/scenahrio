@@ -7,6 +7,7 @@ import SidebarItem from './components/SidebarItem';
 import DisplayProfiles from './components/DisplayProfiles';
 import Scenarios from './components/Scenarios';
 import LoginView from './components/LoginView';
+import SlidingComponent from './components/SlidingComponent';
 
 // Images
 import light_logo from './assets/images/light_logo.png';
@@ -158,6 +159,8 @@ function App() {
     setSelectedComponent(component);
   };
 
+  const [poppedOut, setPoppedOut] = useState(false);
+
   return (
     <div className="App">
       {!isUserLoggedIn() ?
@@ -190,6 +193,12 @@ function App() {
               </div>
             </div>
             <div className="Content">
+              <button onClick={() => setPoppedOut(true)}>Popout</button>
+              <SlidingComponent
+                content={"BABABOOEY"}
+                isVisible={poppedOut}
+                buttonCallback={() => setPoppedOut(false)}
+                />
               {isUserLoggedIn() &&
                 <>
                   {selectedComponent}

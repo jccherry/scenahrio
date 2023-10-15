@@ -13,7 +13,7 @@ import { ReactComponent as FilledCheckIcon } from '../assets/icons/check-square-
 
 
 function UserProfile({ profile, refreshFunction }) {
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(false);
 
   function deleteUserProfile() {
     fetch('/delete_profile', {
