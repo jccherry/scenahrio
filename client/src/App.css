@@ -333,11 +333,15 @@ button {
   display: flex;
 }
 
+.fullScreenView {
+  height: 100vh;
+}
+
 .loginView {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   text-align: center;
 }
 
@@ -350,6 +354,27 @@ button {
   padding-left: 15px;
   padding-right: 15px;
   padding-bottom: 15px;
+}
+
+.fullScreenFooter {
+  width: 100vw;
+  height: 10vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background-color: #1c3f63;
+}
+
+.fullScreenFooter > *:not(:last-child) {
+  padding-right: 5px;
+  border-right: 1px solid #555;
+}
+
+.fullScreenFooter > *:not(:first-child) {
+  padding-left: 5px;
+  border-left: 1px solid #555;
 }
 
 .SidebarBottom {
@@ -449,4 +474,32 @@ button {
   margin-right: 10px;
 }
 
+.videoView {
+  pointer-events: none;
+  width: 50vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.loginViewContainer {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+}
+
+.loginView {
+  width: 50vw;
+}
+
+.youtube-player {
+  height: 340px;
+}
+
+iframe {
+  border: none;
+  border-radius: 10px;
+  width: 639;
+}
