@@ -56,10 +56,6 @@ function UserProfile({ profile, refreshFunction }) {
                 hoverComponent={<FilledCheckIcon className='hoveredSvgButton' />}
                 onClick={() => { saveProfile(); setExpanded(!expanded); }}
               />
-              {
-              //<button className='expandButton' onClick={() => { saveProfile(); setExpanded(!expanded); }}>Save</button>
-              //<button className='deleteButton' onClick={() => { setExpanded(false); deleteUserProfile(); }}>Delete</button>
-              }   
             </>
             :
             <>
@@ -68,8 +64,6 @@ function UserProfile({ profile, refreshFunction }) {
                 hoverComponent={<FilledPencilIcon className='hoveredSvgButton' />}
                 onClick={() => { setExpanded(!expanded) }}
               />
-              { //<button className='expandButton' onClick={() => { setExpanded(!expanded) }}>Edit</button> 
-              }
             </>          
           }
         </div>

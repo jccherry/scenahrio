@@ -10,6 +10,10 @@ import LoginView from './components/LoginView';
 
 // Images
 import light_logo from './assets/images/light_logo.png';
+import { ReactComponent as OptionIcon } from './assets/icons/option.svg';
+import { ReactComponent as PersonVcardIcon } from './assets/icons/person-vcard.svg';
+import { ReactComponent as LogoutIcon } from './assets/icons/box-arrow-in-right.svg';
+
 
 function App() {
   const [user, setUser] = useState({});
@@ -123,8 +127,23 @@ function App() {
       <>
         {user &&
           <div className='userProfile'>
-            <img src={user.picture}></img>
-            <h3>{user.name}</h3>
+            <div className='userDisplay'>
+              <img src={user.picture} className='userPicture'></img>
+              <div className='userDisplayName'>
+                <span className='userDisplayNameSpan'>
+                  {user.given_name}
+                </span>
+                <span className='userDisplayNameSpan'>
+                  {user.family_name}
+                </span>
+              </div>
+            </div>
+            <SidebarItem
+              label="Sign Out"
+              onClick={() => handleSignOut()}
+              defaultSvg={<LogoutIcon className={'sidebarIconSvg'} />}
+              hoverSvg={<LogoutIcon className={'sidebarIconSvg'} />}
+            />
           </div>
         }
       </>
@@ -132,7 +151,7 @@ function App() {
   }
 
   const [selectedComponent, setSelectedComponent] = useState(
-    <></>
+    <Scenarios />
   );
 
   const renderComponent = (component) => {
@@ -153,12 +172,21 @@ function App() {
           <div className="Main">
             <div className="Sidebar">
               <div className="SidebarContent">
-                <UserProfile />
-                <SidebarItem label="Employee Profiles" onClick={() => renderComponent(<DisplayProfiles />)} />
-                <SidebarItem label="Scenarios" onClick={() => renderComponent(<Scenarios />)} />
+                <SidebarItem
+                  label="Scenarios"
+                  onClick={() => renderComponent(<Scenarios />)}
+                  defaultSvg={<OptionIcon className={'sidebarIconSvg'} />}
+                  hoverSvg={<OptionIcon className={'sidebarIconSvg'} />}
+                />
+                <SidebarItem
+                  label="Profiles"
+                  onClick={() => renderComponent(<DisplayProfiles />)}
+                  defaultSvg={<PersonVcardIcon className={'sidebarIconSvg'} />}
+                  hoverSvg={<PersonVcardIcon className={'sidebarIconSvg'} />}
+                />
               </div>
               <div className="SidebarBottom">
-                <SidebarItem label="Log Out" onClick={() => handleSignOut()} />
+                <UserProfile />
               </div>
             </div>
             <div className="Content">
