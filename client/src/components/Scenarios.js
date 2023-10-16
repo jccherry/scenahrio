@@ -14,18 +14,15 @@ import { ReactComponent as FilledCheckIcon } from '../assets/icons/check-square-
 import { ReactComponent as SendIcon } from '../assets/icons/send.svg';
 import { ReactComponent as FilledSendIcon } from '../assets/icons/send-fill.svg';
 import EditableForm from "./EditableForm";
-
-
-const sampleTree = {
-    message: "Root",
-    selected: true,
-    children: []
-};
+import SlidingComponent from "./SlidingComponent";
+import ConversationView from "./ConversationView";
 
 function ScenarioListItem({
     scenario
+    , sendCallback
 }) {
     const [expanded, setExpanded] = useState(false);
+    const [profileName, setProfileName] = useState(null);
 
     const editScenario = async () => {
         console.log('Edit Scenario Async');
@@ -42,10 +39,32 @@ function ScenarioListItem({
         .catch(err => console.error(err));
     }
 
+    const getProfileName = async () => {
+        console.log("Getting Profile Name");
+        fetch('/get_profile_name', {
+            method: 'POST'
+            , headers: {
+                'Content-Type' : 'application/json'
+            }
+            , body: JSON.stringify({ profile_id: scenario.profile_id})
+        }).then(response => response.json())
+        .then(response => {
+            setProfileName(response.profile_name);
+        })
+        .catch(err => console.error(err));
+    }
+
+    useEffect(() => {
+        getProfileName();
+    }, [scenario]);
+
     return (
         <div className="scenarioCell">
             <div className="scenarioCellHeader">
                 <div className="scenarioCellName">{scenario.scenario_name}</div>
+                { profileName &&
+                    <div className="scenarioProfileName">{profileName}</div>
+                }
                 <div className="buttonContainer">
                     {expanded ?
                         <>
@@ -63,7 +82,7 @@ function ScenarioListItem({
                                 hoverComponent={<FilledCheckIcon className='hoveredSvgButton' />}
                                 onClick={() => {
                                     console.log("EDITED");
-                                    setExpanded(!expanded); 
+                                    setExpanded(false); 
                                     console.log(scenario);
                                     editScenario();
                                 }}
@@ -72,9 +91,9 @@ function ScenarioListItem({
                                 defaultComponent={<SendIcon className='defaultSvgButton' />}
                                 hoverComponent={<FilledSendIcon className='hoveredSvgButton' />}
                                 onClick={() => {
-                                    console.log("SENT");
-                                    setExpanded(!expanded);
-                                    console.log(scenario);
+                                    console.log("SENDING");
+                                    setExpanded(false);
+                                    sendCallback();
                                 }}
                             />
                         </>
@@ -84,7 +103,7 @@ function ScenarioListItem({
                                 defaultComponent={<PencilIcon className='defaultSvgButton' />}
                                 hoverComponent={<FilledPencilIcon className='hoveredSvgButton' />}
                                 onClick={() => { 
-                                    setExpanded(!expanded)
+                                    setExpanded(true);
                                     console.log("EDITING");
                                     console.log(scenario);
                                 }}
@@ -93,9 +112,8 @@ function ScenarioListItem({
                                 defaultComponent={<SendIcon className='defaultSvgButton' />}
                                 hoverComponent={<FilledSendIcon className='hoveredSvgButton' />}
                                 onClick={() => {
-                                    console.log("SENT");
-                                    setExpanded(!expanded);
-                                    console.log(scenario);
+                                    console.log("SENDING");
+                                    sendCallback();
                                 }}
                             />
                         </>
@@ -125,16 +143,9 @@ function ScenarioListItem({
 }
 
 function Scenarios() {
-    const [tree, setTree] = useState(sampleTree);
     const [scenarios, setScenarios] = useState([]);
-
-    const concatenateMessagesToRoot = (node) => {
-        if (!node.parent) {
-            return [node.message];
-        } else {
-            return concatenateMessagesToRoot(node.parent).concat([node.message]);
-        }
-    };
+    const [isSliderOpen, setIsSliderOpen] = useState(false);
+    const [sliderScenario, setSliderScenario] = useState(null);
 
     const fetchScenarios = async () => {
         fetch('/get_scenarios', {
@@ -160,58 +171,6 @@ function Scenarios() {
         console.log('Scenarios:');
         console.log(scenarios);
     }, [scenarios])
-
-    const handleAddChild = (parentNode) => {
-        const messages = concatenateMessagesToRoot(parentNode);
-
-        const createNewChild = (message) => {
-            // Create a new child node
-            const newChild = {
-                message: message,
-                selected: true,
-                children: [],
-                parent: parentNode
-            };
-
-            // Add the new child to the parent's children
-            parentNode.children.push(newChild);
-        }
-
-        fetch('/add_nodes_to_tree', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ messages: messages }),
-        }).then(response => response.json())
-            .then(response => {
-                response.messages.map((message) => {
-                    createNewChild(message);
-                });
-                setTree({ ...tree });
-            });
-        // Next steps, get the single scenario to store in database
-        // Then expand on that scenario's capability
-        // Ie, assign a user to it, get messages alternating, then finally
-        // integrate the GPT API
-    };
-
-    const handleDeleteNode = (nodeToDelete) => {
-        const removeNode = (nodes, node) => {
-            for (let i = 0; i < nodes.length; i++) {
-                if (nodes[i] === node) {
-                    nodes.splice(i, 1);
-                    return;
-                }
-                if (nodes[i].children) {
-                    removeNode(nodes[i].children, node);
-                }
-            }
-        };
-
-        removeNode(tree.children, nodeToDelete);
-        setTree({ ...tree }); // Trigger re-render
-    };
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -248,22 +207,30 @@ function Scenarios() {
             <Modal isOpen={isModalOpen} onClose={closeModal} displayCloseButton={false}>
                 <ScenarioSelector submitCallback={(scenario) => { closeModal(); uploadScenario(scenario); }} />
             </Modal>
+            <SlidingComponent
+                content = {
+                    <ConversationView scenario = {sliderScenario} />
+                }
+                isVisible={isSliderOpen}
+                buttonCallback={() => setIsSliderOpen(false)}
+            />
             {scenarios != [] &&
                 <div className="scenariosList">
                     {
                         scenarios.map((scenario, index) => (
-                            <ScenarioListItem scenario={scenario} />
+                            <ScenarioListItem 
+                                scenario={scenario} 
+                                sendCallback={() => {
+                                    console.log("SENDCALLBACK!!");
+                                    console.log(scenario);
+                                    setSliderScenario(scenario);
+                                    setIsSliderOpen(true);
+                                }}
+                                />
                         ))
                     }
                 </div>
             }
-            <div className="tree">
-                <TreeDisplay
-                    node={tree}
-                    onAddChild={handleAddChild}
-                    onDeleteNode={handleDeleteNode}
-                />
-            </div>
         </div>
     );
 }

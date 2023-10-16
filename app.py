@@ -174,6 +174,24 @@ def get_scenario_content():
     scenario_id = request.json.get('scenario_id')
     return jsonify({ 'scenario' : 'OH MADONE' });
 
+@app.route('/get_profile_name', methods=['POST'])
+def get_profile_name():
+    profile_id = request.json.get('profile_id')
+    query = f"""
+        SELECT
+            name
+        FROM
+            profiles
+        WHERE
+            profile_id = '{profile_id}'
+            AND user_sub = '{session['user']['sub']}'
+        LIMIT 1;
+    """
+    profile_name = execute_query(query)['name'][0]
+    print("PROFILE NAME DF CALLED")
+    return jsonify({ 'profile_name' : profile_name})
+
+
 @app.route('/')
 def index():
     return app.send_static_file('index.html')

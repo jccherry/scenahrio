@@ -16,13 +16,17 @@ def execute_command_no_return(sql_command):
         connection.execute(text(sql_command))
         connection.commit()
         connection.close()
+    conn.dispose()
 
 # Executes a command and returns data from the SQL server as a pandas dataframe
 def execute_query(sql_query):
     conn = db_connection()
-    return pd.read_sql(sql_query, con=conn)
+    ret = pd.read_sql(sql_query, con=conn)
+    conn.dispose()
+    return ret
 
 # Inserts a dataframe into a table
 def insert_dataframe_into_table(df, table_name):
     conn = db_connection()
     df.to_sql(table_name, con=conn, if_exists='append', index=False)
+    conn.dispose()

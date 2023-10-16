@@ -12,6 +12,8 @@ body {
   flex-direction: column;
   width: 100vw;
   height: 100vh;
+  max-height: 100vh;
+  max-width: 100vh;
 }
 
 .Header {
@@ -61,6 +63,8 @@ body {
   position:relative;
   padding-left: 10px;
   padding-right: 10px;
+  max-height: 100%;
+  overflow-y: scroll;
 }
 
 /* Apply modern fonts */
@@ -68,6 +72,14 @@ body {
 .Sidebar,
 .Content {
   font-family: "Roboto", sans-serif; /* Replace with your preferred modern font */
+}
+
+.scenariosPage {
+  padding-top: 2vw;
+  padding-left: 3vw;
+  padding-right: 3vw;
+  max-height: 100%;
+  overflow-y: scroll;
 }
 
 button {
@@ -148,6 +160,14 @@ button {
   margin-bottom: 0; /* Remove padding on the bottom */
 }
 
+.scenarioProfileName {
+  flex: 1;
+  margin-right: auto;
+  font-weight: lighter;
+  text-align: right;
+  padding-right: 10px;
+}
+
 .addProfileButton {
   border-radius: 50%;
   width: 40px;
@@ -167,6 +187,14 @@ button {
   background-color: #1c3f63; /* Darker blue on hover */
   color: white;
   transition: background-color 0.3s, color 0.3s;
+}
+
+.userProfilesPage {
+  max-height: 100%;
+  overflow-y: scroll;
+  padding-top: 2vw;
+  padding-left: 3vw;
+  padding-right: 3vw;
 }
 
 .userProfilesHeading, .scehariosHeading {
@@ -515,6 +543,9 @@ iframe {
   width: 100%;
   height: 100%;
   transition: left 0.3s ease;
+  background-color: #e0e0e0;
+  max-height: 100%;
+  overflow-y: scroll;
 }
 
 .slider.visible {
