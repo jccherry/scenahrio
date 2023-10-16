@@ -7,32 +7,39 @@ body {
   transition: background-color 0.3s, color 0.3s;
 }
 
-/* Top bar */
+.appContainer {
+  display:flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
+
 .Header {
-  background-color: #1c3f63; /* Darker blue header */
+  background-color: #1c3f63;
   height: 56px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
+  width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 24px;
-  color: white;
+  color: #fff;
+  flex:0;
 }
 
-/* Sidebar */
+.Main {
+  display:flex;
+  flex-direction: row;
+  width: 100vw;
+  flex:1;
+}
+
 .Sidebar {
-  background-color: #385b7c; /* Slightly lighter blue sidebar */
+  background-color: #385b7c;
   width: 175px;
-  position: fixed;
-  top: 56px; /* To avoid overlapping with the top bar */
-  left: 0;
-  bottom: 0;
   overflow-y: auto;
   color: white;
+  display: flex;
+  flex-direction: column; /* Set the Sidebar to use flex layout */
 }
 
 .SidebarContent {
@@ -40,22 +47,20 @@ body {
   margin-bottom: 4px;
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
-button {
-  cursor: pointer;
-  vertical-align: center;
+.SidebarBottom {
+  position: sticky;
+  bottom: 0; /* Stick to the bottom */
+  background-color: #385b7c; /* Match the background color */
 }
 
-/* Content */
 .Content {
-  margin-left: 175px; /* Width of the sidebar */
-  padding-top: 56px; /* Height of the top bar */
-  padding-left: 20px;
-  padding-right: 20px;
-  transition: margin-left 0.3s;
-  overflow-y: auto; /* Enable vertical scrollbar when content overflows vertically */
-  overflow-x: hidden; /* Hide horizontal scrollbar */
+  flex: 1;
+  position:relative;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 /* Apply modern fonts */
@@ -63,6 +68,11 @@ button {
 .Sidebar,
 .Content {
   font-family: "Roboto", sans-serif; /* Replace with your preferred modern font */
+}
+
+button {
+  cursor: pointer;
+  vertical-align: center;
 }
 
 /* Style for the editItemDiv container */
@@ -377,12 +387,6 @@ button {
   border-left: 1px solid #555;
 }
 
-.SidebarBottom {
-  position: absolute;
-  width: 100%;
-  bottom: 5px;
-}
-
 .defaultSvgButton {
   fill: #007bff;
   width: 100%;
@@ -506,14 +510,13 @@ iframe {
 
 .slider {
   position: absolute;
-  top: 56px;
-  right: -100%; /* Initially hidden to the right */
+  top: 0;
+  left: 100%;
   width: 100%;
-  bottom:0;
-  background-color: #fff; /* Set the background color you want */
-  transition: right 0.3s ease; /* Add a transition for a smooth slide-in effect */
+  height: 100%;
+  transition: left 0.3s ease;
 }
 
 .slider.visible {
-  right: 0; /* Slide in to cover the entire div */
+  left: 0;
 }

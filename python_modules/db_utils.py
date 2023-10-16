@@ -95,6 +95,9 @@ def add_scenario_to_database(scenario_json, user_sub):
         'user_sub': user_sub
         , 'scenario_id': scenario_id
         , 'profile_id': profile_id
+        , 'scenario_name' : scenario_json['name']
+        , 'desired_outcome' : scenario_json['desiredOutcome']
+        , 'context' : scenario_json['context']
         , 'contents' : '{}'
     }
 
@@ -102,4 +105,38 @@ def add_scenario_to_database(scenario_json, user_sub):
 
     print(insert_dict)
 
-    
+def get_scenario_list(user_sub):
+    query = f"""
+    SELECT
+        user_sub
+        , scenario_id
+        , profile_id
+        , scenario_name
+        , desired_outcome
+        , context
+    FROM
+        scenarios
+    WHERE
+        user_sub = '{user_sub}'
+    ORDER BY
+        scenario_name
+    ;
+    """
+    return execute_query(query)
+
+def edit_scenario_settings_from_json(scenario_json):
+    print("editing a scenario")
+    cmd = f"""
+    UPDATE
+        scenarios
+    SET
+        scenario_name = '{scenario_json['scenario_name']}'
+        , desired_outcome = '{scenario_json['desired_outcome']}'
+        , context = '{scenario_json['context']}'
+    WHERE
+        scenario_id = '{scenario_json['scenario_id']}'
+        AND profile_id = '{scenario_json['profile_id']}'
+        AND user_sub = '{scenario_json['user_sub']}'
+    ;
+    """
+    execute_command_no_return(cmd)

@@ -21,27 +21,26 @@ def login_user():
 def get_logged_in_user():
     print("RUNNING GET_LOGGED_IN_USER ROUTE")
     if 'user' in session:
-        return jsonify({'user': session['user'] })
+        return jsonify({'user': session['user']})
     else:
         return jsonify({'error': 'No Logged In User'})
-    
+
 @app.route("/get_user_profiles", methods=["GET"])
 def get_user_profiles_callback():
     print("RETURNING THE USER's PROFILES")
     user_profiles = get_user_profiles(session['user']['sub']).to_json(orient='records', default_handler=str)
     return user_profiles
-    
+
 @app.route("/logout", methods=['GET'])
 def logout_user():
     session.clear()
-    return jsonify({"message" : "Logged Out"})
+    return jsonify({"message": "Logged Out"})
 
 @app.route('/add_profile', methods=['POST'])
 def add_profile():
     profile_json = request.json.get('profile')
     add_profile_to_database(profile_json, session['user']['sub'])
-
-    return jsonify({"message" : "Profile added"})
+    return jsonify({"message": "Profile added"})
 
 @app.route('/delete_profile', methods=['POST'])
 def delete_profile():
@@ -61,10 +60,8 @@ def edit_profile():
 @app.route('/create_scenario', methods=['POST'])
 def create_scenario():
     scenario_json = request.json.get('scenario')
-    #print(scenario_json)
     add_scenario_to_database(scenario_json=scenario_json, user_sub=session['user']['sub'])
     return jsonify({"message": "Scenario Uploaded"})
-
 
 @app.route('/add_nodes_to_tree', methods=['POST'])
 def add_nodes_to_tree():
@@ -72,15 +69,115 @@ def add_nodes_to_tree():
     print(messages)
     return jsonify({
         "messages": [
-            "Test 1"
-            , "Test 2"
-            , "Test 3"
-        ]})
+            "Test 1",
+            "Test 2",
+            "Test 3"
+        ]
+    })
+
+jchiaramonte_sub = '107555079500216939004'
+pwalnuts_id = '8972406bb759686fb431968e75447cc5a12cfa9f64520075d7f95e4de5a769b4'
+example_scenario = {
+    "scenarios": [
+        {
+            "scenario_id": 'abc123',
+            "user_sub": jchiaramonte_sub,
+            "profile_id": pwalnuts_id,
+            "contents": {
+                "user": {
+                    "user_type": "employee",
+                    "user_id": pwalnuts_id
+                },
+                "message": "Ralphie's giving me agita and I want something done about it.",
+                "children": [
+                    {
+                        "user": {
+                            "user_type": "hr",
+                            "user_id": None
+                        },
+                        "message": "Have you tried speaking to Ralphie?",
+                        "children": []
+                    },
+                    {
+                        "user": {
+                            "user_type": "hr",
+                            "user_id": None
+                        },
+                        "message": "Do you think he needs to be whacked?",
+                        "children": [
+                            {
+                                "user": {
+                                    "user_type": "employee",
+                                    "user_id": pwalnuts_id
+                                },
+                                "message": "He's gotta go.",
+                                "children": []
+                            },
+                            {
+                                "user": {
+                                    "user_type": "employee",
+                                    "user_id": pwalnuts_id
+                                },
+                                "message": "I must respect a made man.",
+                                "children": []
+                            },
+                            {
+                                "user": {
+                                    "user_type": "employee",
+                                    "user_id": pwalnuts_id
+                                },
+                                "message": "I want to cut him out of the esplanade project.",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "user": {
+                            "user_type": "hr",
+                            "user_id": None
+                        },
+                        "message": "Would you like me to schedule a meeting with you and Ralphie to discuss your differences?",
+                        "children": []
+                    }
+                ]
+            }
+        },
+        {
+            "scenario_id": '12345rewsdfgtre',
+            "user_sub": '107555079500216939004',
+            "profile_id": 'tsoprano_id',
+            "contents": {}
+        },
+        {
+            "scenario_id": 'abc1asdasd23',
+            "user_sub": '107555079500216939004',
+            "profile_id": 'japrile_id',
+            "contents": {}
+        }
+    ]
+}
+
+@app.route('/get_scenarios', methods=['GET'])
+def get_scenarios():
+    print()
+    scenario_list_json = get_scenario_list(session['user']['sub']).to_json(orient='records', default_handler=str)
+    return scenario_list_json
+
+@app.route('/edit_scenario_settings', methods=['POST'])
+def edit_scenario_settings():
+    scenario_json = request.json.get('scenario')
+    edit_scenario_settings_from_json(scenario_json)
+    return jsonify({ 'message' : 'Scenario Settings Edited'})
+
+@app.route('/get_scenario_content', methods=['POST'])
+def get_scenario_content():
+    scenario_id = request.json.get('scenario_id')
+    return jsonify({ 'scenario' : 'OH MADONE' });
 
 @app.route('/')
 def index():
     return app.send_static_file('index.html')
-    
+
 if __name__ == "__main__":
 
     host = 'localhost'
@@ -91,6 +188,4 @@ if __name__ == "__main__":
         host = '0.0.0.0'
         port = 5000
 
-    app.run(host=host
-            , port=port
-            , debug=True)
+    app.run(host=host, port=port, debug=True)
