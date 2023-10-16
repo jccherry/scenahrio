@@ -46,8 +46,16 @@ def add_profile():
 def delete_profile():
     profile_id = request.json.get('profile_id')
     print(f"DELETING USER PROFILE with profile_id = {profile_id}")
-    delete_profile_from_database(profile_id)
+    delete_profile_from_database(profile_id, session['user']['sub'])
     return jsonify({"message": "Profile deleted"})
+
+@app.route('/delete_scenario', methods=['POST'])
+def delete_scenario():
+    scenario_id = request.json.get('scenario_id')
+    print(f"DELETING SCENARIO WITH ID = {scenario_id}")
+    delete_scenario_from_database(scenario_id=scenario_id, user_sub=session['user']['sub'])
+    return jsonify({"message": "Scenario deleted"})
+
 
 @app.route('/edit_profile', methods=['POST'])
 def edit_profile():

@@ -20,51 +20,44 @@ import ConversationView from "./ConversationView";
 function ScenarioListItem({
     scenario
     , sendCallback
+    , deleteCallback
 }) {
     const [expanded, setExpanded] = useState(false);
-    const [profileName, setProfileName] = useState(null);
 
     const editScenario = async () => {
         console.log('Edit Scenario Async');
         fetch('/edit_scenario_settings', {
             method: 'POST'
-            , headers : {
-                'Content-Type' : 'application/json'
+            , headers: {
+                'Content-Type': 'application/json'
             }
             , body: JSON.stringify({ scenario: scenario }),
         }).then(response => response.json())
-        .then(response => {
-            console.log(response);
-        })
-        .catch(err => console.error(err));
+            .then(response => {
+                console.log(response);
+            })
+            .catch(err => console.error(err));
     }
 
-    const getProfileName = async () => {
-        console.log("Getting Profile Name");
-        fetch('/get_profile_name', {
+    const deleteScenario = async () => {
+        console.log('Delete Scenario Async');
+        fetch('/delete_scenario', {
             method: 'POST'
             , headers: {
-                'Content-Type' : 'application/json'
+                'Content-Type': 'application/json'
             }
-            , body: JSON.stringify({ profile_id: scenario.profile_id})
+            , body: JSON.stringify({ scenario_id: scenario.scenario_id })
         }).then(response => response.json())
-        .then(response => {
-            setProfileName(response.profile_name);
-        })
-        .catch(err => console.error(err));
+            .then(response => {
+                console.log(response);
+            }).then(() => { deleteCallback(); })
     }
-
-    useEffect(() => {
-        getProfileName();
-    }, [scenario]);
 
     return (
         <div className="scenarioCell">
             <div className="scenarioCellHeader">
                 <div className="scenarioCellName">{scenario.scenario_name}</div>
-                { profileName &&
-                    <div className="scenarioProfileName">{profileName}</div>
-                }
+                <div className="scenarioProfileName">{scenario.profile_name}</div>
                 <div className="buttonContainer">
                     {expanded ?
                         <>
@@ -73,8 +66,7 @@ function ScenarioListItem({
                                 hoverComponent={<FilledTrashIcon className='hoveredSvgButton' />}
                                 onClick={() => {
                                     setExpanded(false);
-                                    console.log("TRASHED"); 
-                                    console.log(scenario);
+                                    deleteScenario();
                                 }}
                             />
                             <ComponentButton
@@ -82,7 +74,7 @@ function ScenarioListItem({
                                 hoverComponent={<FilledCheckIcon className='hoveredSvgButton' />}
                                 onClick={() => {
                                     console.log("EDITED");
-                                    setExpanded(false); 
+                                    setExpanded(false);
                                     console.log(scenario);
                                     editScenario();
                                 }}
@@ -102,7 +94,7 @@ function ScenarioListItem({
                             <ComponentButton
                                 defaultComponent={<PencilIcon className='defaultSvgButton' />}
                                 hoverComponent={<FilledPencilIcon className='hoveredSvgButton' />}
-                                onClick={() => { 
+                                onClick={() => {
                                     setExpanded(true);
                                     console.log("EDITING");
                                     console.log(scenario);
@@ -148,14 +140,13 @@ function Scenarios() {
     const [sliderScenario, setSliderScenario] = useState(null);
 
     const fetchScenarios = async () => {
-        fetch('/get_scenarios', {
+        await fetch('/get_scenarios', {
             method: 'GET'
             , headers: {
                 'Content-Type': 'application/json',
             }
         }).then(response => response.json())
             .then(scenarios => {
-                console.log("AVAVAVVAVAVVAVVAV")
                 console.log(scenarios);
                 setScenarios(scenarios);
             })
@@ -183,7 +174,7 @@ function Scenarios() {
     };
 
     const uploadScenario = async (scenario) => {
-        console.log('Scenario upload async');
+        console.log('Scenario upload');
         fetch('/create_scenario', {
             method: 'POST',
             headers: {
@@ -193,7 +184,7 @@ function Scenarios() {
         }).then(response => response.json())
             .then(response => {
                 console.log(response);
-            });
+            }).then(() => { fetchScenarios(); });
     };
 
     return (
@@ -208,8 +199,8 @@ function Scenarios() {
                 <ScenarioSelector submitCallback={(scenario) => { closeModal(); uploadScenario(scenario); }} />
             </Modal>
             <SlidingComponent
-                content = {
-                    <ConversationView scenario = {sliderScenario} />
+                content={
+                    <ConversationView scenario={sliderScenario} />
                 }
                 isVisible={isSliderOpen}
                 buttonCallback={() => setIsSliderOpen(false)}
@@ -218,15 +209,18 @@ function Scenarios() {
                 <div className="scenariosList">
                     {
                         scenarios.map((scenario, index) => (
-                            <ScenarioListItem 
-                                scenario={scenario} 
+                            <ScenarioListItem
+                                scenario={scenario}
                                 sendCallback={() => {
                                     console.log("SENDCALLBACK!!");
                                     console.log(scenario);
                                     setSliderScenario(scenario);
                                     setIsSliderOpen(true);
                                 }}
-                                />
+                                deleteCallback={() => {
+                                    fetchScenarios();
+                                }}
+                            />
                         ))
                     }
                 </div>

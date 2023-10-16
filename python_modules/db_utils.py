@@ -35,9 +35,20 @@ def add_profile_to_database(profile_json, user_sub):
     profile_df.insert(0, 'profile_id', [unique_id])
     insert_dataframe_into_table(profile_df,'profiles')
 
-def delete_profile_from_database(profile_id):
-    cmd = f"DELETE FROM profiles WHERE profile_id = '{profile_id}'"
+def delete_profile_from_database(profile_id, user_sub):
+    cmd = f"DELETE FROM profiles WHERE profile_id = '{profile_id}' AND user_sub = '{user_sub}'"
     print(cmd)
+    execute_command_no_return(cmd)
+
+def delete_scenario_from_database(scenario_id, user_sub):
+    cmd = f"""
+        DELETE FROM
+            scenarios
+        WHERE
+            scenario_id = '{scenario_id}'
+            AND user_sub = '{user_sub}'
+        ;
+    """
     execute_command_no_return(cmd)
 
 def get_user_profiles(user_sub):
@@ -108,16 +119,20 @@ def add_scenario_to_database(scenario_json, user_sub):
 def get_scenario_list(user_sub):
     query = f"""
     SELECT
-        user_sub
-        , scenario_id
-        , profile_id
-        , scenario_name
-        , desired_outcome
-        , context
+        s.user_sub
+        , s.scenario_id
+        , s.profile_id
+        , p.name profile_name
+        , s.scenario_name
+        , s.desired_outcome
+        , s.context
     FROM
-        scenarios
+        scenarios s
+        LEFT JOIN profiles p ON
+            s.user_sub = p.user_sub
+            AND s.profile_id = p.profile_id
     WHERE
-        user_sub = '{user_sub}'
+        s.user_sub = '{user_sub}'
     ORDER BY
         scenario_name
     ;
