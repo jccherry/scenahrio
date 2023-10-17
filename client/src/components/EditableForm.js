@@ -6,9 +6,7 @@ function EditableForm({
     header = <></>
     , formDict
     , footer = <></>
-    , initialVisibility = false
     , saveFunction
-    , autosave = false
 }) {
 
     const [formState, setFormState] = useState(formDict);
@@ -21,6 +19,7 @@ function EditableForm({
             , [attributeName]: value
             ,
         });
+        saveFunction(formState);
     }
 
     // Use useEffect to trigger saveFunction when formState changes
@@ -29,6 +28,10 @@ function EditableForm({
         console.log(formState);
         saveFunction(formState);
     }, [formState]); // Only run this effect when formState changes
+
+    useEffect(() => {
+        setFormState(formDict);
+    }, [formDict])
 
     return (
         <div className="editForm">
@@ -41,8 +44,8 @@ function EditableForm({
                         label={key}
                         value={formState[key]}
                         onSaveFunction={(value) => updateFormState(key, value)}
-                        initialVisibility={initialVisibility}
-                        autosave={autosave}
+                        initialVisibility={true}
+                        autosave={true}
                     />
                 ))}
             </div>

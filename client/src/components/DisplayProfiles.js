@@ -56,6 +56,7 @@ function UserProfile({ profile, refreshFunction }) {
                 hoverComponent={<FilledCheckIcon className='hoveredSvgButton' />}
                 onClick={() => { saveProfile(); setExpanded(!expanded); }}
               />
+
             </>
             :
             <>
@@ -64,7 +65,9 @@ function UserProfile({ profile, refreshFunction }) {
                 hoverComponent={<FilledPencilIcon className='hoveredSvgButton' />}
                 onClick={() => { setExpanded(!expanded) }}
               />
-            </>          
+              { //<button className='expandButton' onClick={() => { setExpanded(!expanded) }}>Edit</button> 
+              }
+            </>
           }
         </div>
       </div>
@@ -87,8 +90,6 @@ function UserProfile({ profile, refreshFunction }) {
               profile.years_experience = updatedDict['Years Experience']
               profile.notes = updatedDict['Notes']
             }}
-            initialVisibility={true}
-            autosave={true}
           />
         </div>
         : <></>
@@ -152,7 +153,7 @@ function UserProfileList() {
   }
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
   useEffect(() => {
     if (newProfile !== null && isModalOpen) {
       openModal();
@@ -172,7 +173,7 @@ function UserProfileList() {
       <div className='userProfilesHeader'>
         <h1 className='userProfilesHeading'>Employee Profiles</h1>
         <button className='addProfileButton' onClick={() => addProfile()}>
-          <img src={plus_button} style={{height: '50%'}}></img>
+          <img src={plus_button} style={{ height: '50%' }}></img>
         </button>
       </div>
       <Modal isOpen={isModalOpen} onClose={closeModal} displayCloseButton={false}>

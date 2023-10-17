@@ -16,6 +16,7 @@ import { ReactComponent as FilledSendIcon } from '../assets/icons/send-fill.svg'
 import EditableForm from "./EditableForm";
 import SlidingComponent from "./SlidingComponent";
 import ConversationView from "./ConversationView";
+import DictForm from "./DictForm";
 
 function ScenarioListItem({
     scenario
@@ -23,6 +24,11 @@ function ScenarioListItem({
     , deleteCallback
 }) {
     const [expanded, setExpanded] = useState(false);
+    const [dictForm, setDictForm] = useState({
+        'Name': scenario.scenario_name
+        , 'Desired Outcome': scenario.desired_outcome
+        , 'Context': scenario.context
+    });
 
     const editScenario = async () => {
         console.log('Edit Scenario Async');
@@ -114,19 +120,17 @@ function ScenarioListItem({
             </div>
             {expanded &&
                 <div className="scenarioCellExpanded">
-                    <EditableForm
-                        formDict={{
-                            'Name': scenario.scenario_name
-                            , 'Desired Outcome': scenario.desired_outcome
-                            , 'Context': scenario.context
-                        }}
-                        saveFunction={(updatedDict) => {
+                    <DictForm
+                        formDict={dictForm}
+                        updateFunction={(updatedDict) => {
+                            console.log('UPDATEFUNCTION')
+                            console.log(updatedDict);
+                            setDictForm(updatedDict);
+
                             scenario.scenario_name = updatedDict['Name']
                             scenario.desired_outcome = updatedDict['Desired Outcome']
                             scenario.context = updatedDict['Context']
                         }}
-                        initialVisibility={true}
-                        autosave={true}
                     />
                 </div>
             }
