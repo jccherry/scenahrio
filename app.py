@@ -179,8 +179,14 @@ def edit_scenario_settings():
 
 @app.route('/get_scenario_content', methods=['POST'])
 def get_scenario_content():
+    print("GETTING SCENARIO CONTENT ROUTE")
     scenario_id = request.json.get('scenario_id')
-    return jsonify({ 'scenario' : 'OH MADONE' });
+
+    scenario_contents = get_scenario_from_ids(scenario_id=scenario_id, user_sub=session['user']['sub'])
+    print("SCENARIO CONTENTS:")
+    print(scenario_contents)
+
+    return jsonify({ 'scenario' : scenario_contents.to_json(orient='records') });
 
 @app.route('/get_profile_name', methods=['POST'])
 def get_profile_name():

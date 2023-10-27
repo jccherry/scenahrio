@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import TreeDisplay from "./TreeDisplay";
 import ScenarioSelector from "./ScenarioSelector";
 import Modal from "./Modal";
 import ComponentButton from "./ComponentButton";
@@ -13,7 +12,6 @@ import { ReactComponent as CheckIcon } from '../assets/icons/check-square.svg';
 import { ReactComponent as FilledCheckIcon } from '../assets/icons/check-square-fill.svg';
 import { ReactComponent as SendIcon } from '../assets/icons/send.svg';
 import { ReactComponent as FilledSendIcon } from '../assets/icons/send-fill.svg';
-import EditableForm from "./EditableForm";
 import SlidingComponent from "./SlidingComponent";
 import ConversationView from "./ConversationView";
 import DictForm from "./DictForm";

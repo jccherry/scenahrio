@@ -8,11 +8,31 @@ const sampleTree = {
     children: []
 };
 
+function ScenarioDetailItem({
+    label = undefined
+    , contents = undefined
+}) {
+    return (
+        <div className='scenarioDetailItem'>
+            {label && contents &&
+                <>
+                    <div className='scenarioDetailItemHeader'>
+                        {label}:
+                    </div>
+                    <div className='scenarioDetailItemContent'>
+                        {contents}
+                    </div>
+                </>
+            }
+        </div>
+    );
+}
+
 function ConversationView({
-    scenario_id
+    scenario
 }) {
     const [tree, setTree] = useState(sampleTree);
-    const [scenario, setScenario] = useState({});
+    const [scenarioDetails, setScenarioDetails] = useState({});
 
     const concatenateMessagesToRoot = (node) => {
         if (!node.parent) {
@@ -22,23 +42,28 @@ function ConversationView({
         }
     };
 
+    useEffect(() => {
+        console.log("SCENARIO UPDATED IN ConversationView");
+        console.log(scenario);
+    }, scenario)
+
     const retrieveScenarioContent = async (scenarioId) => {
         fetch('/get_scenario_content', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ scenario_id: scenario_id }),
+            body: JSON.stringify({ scenario_id: scenario.scenario_id }),
         }).then(response => response.json())
             .then(scenario => {
-                console.log(scenario);
-                setScenario(scenario.scenario);
+                const new_scenario = JSON.parse(scenario.scenario)[0];
+                setScenarioDetails(new_scenario);
             });
     }
 
     useEffect(() => {
         retrieveScenarioContent();
-    }, [])
+    }, [scenario])
 
     const handleAddChild = (parentNode) => {
         const messages = concatenateMessagesToRoot(parentNode);
@@ -90,16 +115,30 @@ function ConversationView({
 
     return (
         <div className='conversationView'>
-            {scenario.scenario_name}
-            <div className="tree">
-                <TreeDisplay
-                    node={tree}
-                    onAddChild={handleAddChild}
-                    onDeleteNode={handleDeleteNode}
-                />
-            </div>
+            {scenario &&
+                <div className='conversationName'>
+                    {scenario.scenario_name}
+                </div>
+            }
+            {scenarioDetails &&
+                <>
+                    <div className='scenarioDetails'>
+                        <ScenarioDetailItem label='Scenario Name' contents={scenarioDetails.scenario_name} />
+                        <ScenarioDetailItem label='Employee' contents={scenarioDetails.profile_name} />
+                        <ScenarioDetailItem label='Desired Outcome' contents={scenarioDetails.desired_outcome} />
+                        <ScenarioDetailItem label='Context' contents={scenarioDetails.context} />
+                    </div>
+                    <div className="tree">
+                        <TreeDisplay
+                            node={tree}
+                            onAddChild={handleAddChild}
+                            onDeleteNode={handleDeleteNode}
+                        />
+                    </div>
+                </>
+            }
         </div>
-    )
+    );
 }
 
 export default ConversationView

@@ -65,6 +65,7 @@ body {
   padding-right: 10px;
   max-height: 100%;
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 /* Apply modern fonts */
@@ -546,8 +547,27 @@ iframe {
   background-color: #e0e0e0;
   max-height: 100%;
   overflow-y: scroll;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 .slider.visible {
   left: 0;
+}
+
+.scenarioDetails {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for a modern look */
+  padding:15px;
+  width: 65%;
+}
+
+.conversationView {
+  width: 100%;
+  height: auto;
+  align-items: center;
 }

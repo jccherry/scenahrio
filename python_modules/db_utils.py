@@ -155,3 +155,27 @@ def edit_scenario_settings_from_json(scenario_json):
     ;
     """
     execute_command_no_return(cmd)
+
+def get_scenario_from_ids(scenario_id, user_sub):
+    query = f"""
+        SELECT
+            s.scenario_name
+            , s.scenario_id
+            , s.context
+            , s.desired_outcome
+            , s.contents
+            , p.name profile_name
+            , p.age profile_age
+            , p.job_title profile_job_title
+            , p.gender profile_gender
+        FROM
+            scenarios s
+            LEFT JOIN profiles p ON
+                p.profile_id = s.profile_id
+                AND s.user_sub = p.user_sub
+        WHERE
+            s.scenario_id = '{scenario_id}'
+            AND s.user_sub = '{user_sub}'
+    """
+    ret = execute_query(query)
+    return ret
