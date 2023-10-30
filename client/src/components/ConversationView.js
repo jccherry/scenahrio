@@ -32,15 +32,7 @@ function ConversationView({
     scenario
 }) {
     const [tree, setTree] = useState(sampleTree);
-    const [scenarioDetails, setScenarioDetails] = useState({});
-
-    const concatenateMessagesToRoot = (node) => {
-        if (!node.parent) {
-            return [node.message];
-        } else {
-            return concatenateMessagesToRoot(node.parent).concat([node.message]);
-        }
-    };
+    const [scenarioDetails, setScenarioDetails] = useState(null);
 
     useEffect(() => {
         console.log("SCENARIO UPDATED IN ConversationView");
@@ -57,6 +49,8 @@ function ConversationView({
         }).then(response => response.json())
             .then(scenario => {
                 const new_scenario = JSON.parse(scenario.scenario)[0];
+                console.log("new_scenario: ");
+                console.log(new_scenario);
                 setScenarioDetails(new_scenario);
             });
     }
@@ -65,6 +59,15 @@ function ConversationView({
         retrieveScenarioContent();
     }, [scenario])
 
+    const concatenateMessagesToRoot = (node) => {
+        if (!node.parent) {
+            return [{user: node.user, message: node.message}];
+        } else {
+            return concatenateMessagesToRoot(node.parent).concat([{user: node.user, message: node.message}]);
+        }
+    };
+
+    /*
     const handleAddChild = (parentNode) => {
         const messages = concatenateMessagesToRoot(parentNode);
 
@@ -112,6 +115,26 @@ function ConversationView({
         removeNode(tree.children, nodeToDelete);
         setTree({ ...tree }); // Trigger re-render
     };
+    */
+
+    function onBranch(node) {
+        console.log("onBranch called!");
+        const messages = concatenateMessagesToRoot(node);
+        const details = scenarioDetails;
+        details.messages = messages;
+
+        fetch('/send_messages_to_api', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ details: details}),
+        }).then(response => response.json())
+            .then(response => {
+                console.log("add_nodes_to_tree API response:")
+                console.log(response);
+            });
+    }
 
     return (
         <div className='conversationView'>
@@ -128,13 +151,22 @@ function ConversationView({
                         <ScenarioDetailItem label='Desired Outcome' contents={scenarioDetails.desired_outcome} />
                         <ScenarioDetailItem label='Context' contents={scenarioDetails.context} />
                     </div>
-                    <div className="tree">
+                    {scenarioDetails &&
+                        <div className='messageTree'>
+                        <TreeDisplay
+                            node={scenarioDetails.contents}
+                            onAddChild={(node) => {onBranch(node)}}
+                            onDeleteNode={(node) => {console.log("delete child button"); console.log(node)}}
+                        />
+                        </div>
+                    }
+                    {/*<div className="tree">
                         <TreeDisplay
                             node={tree}
                             onAddChild={handleAddChild}
                             onDeleteNode={handleDeleteNode}
                         />
-                    </div>
+                    </div>*/}
                 </>
             }
         </div>

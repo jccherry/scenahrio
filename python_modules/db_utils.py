@@ -3,6 +3,7 @@ import pandas as pd
 import re
 import hashlib
 import datetime
+import json
 
 # create a unique ID by hashing
 def create_id_hash(string_to_hash):
@@ -65,6 +66,7 @@ def edit_user_profile(user_profile):
         , age = {user_profile['age']}
         , gender = '{user_profile['gender']}'
         , job_title = '{user_profile['job_title']}'
+        , current_salary = {user_profile['current_salary']}
         , notes = '{user_profile['notes']}'
         , years_experience = '{user_profile['years_experience']}'
     WHERE
@@ -109,7 +111,7 @@ def add_scenario_to_database(scenario_json, user_sub):
         , 'scenario_name' : scenario_json['name']
         , 'desired_outcome' : scenario_json['desiredOutcome']
         , 'context' : scenario_json['context']
-        , 'contents' : '{}'
+        , 'contents' : json.dumps({ 'user' : 'HR' , 'message' : 'Hello, how are you?'})
     }
 
     insert_dataframe_into_table(dict_to_dataframe(insert_dict), 'scenarios')
@@ -167,7 +169,9 @@ def get_scenario_from_ids(scenario_id, user_sub):
             , p.name profile_name
             , p.age profile_age
             , p.job_title profile_job_title
+            , p.current_salary profile_salary
             , p.gender profile_gender
+            , p.notes profile_notes
         FROM
             scenarios s
             LEFT JOIN profiles p ON

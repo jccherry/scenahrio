@@ -1,5 +1,6 @@
 from flask import Flask, session, request, jsonify
 from python_modules.db_utils import *
+from python_modules.chat_session import *
 from dotenv import load_dotenv
 
 import os
@@ -71,99 +72,15 @@ def create_scenario():
     add_scenario_to_database(scenario_json=scenario_json, user_sub=session['user']['sub'])
     return jsonify({"message": "Scenario Uploaded"})
 
-@app.route('/add_nodes_to_tree', methods=['POST'])
-def add_nodes_to_tree():
-    messages = request.json.get('messages')
-    print(messages)
-    return jsonify({
-        "messages": [
-            "Test 1",
-            "Test 2",
-            "Test 3"
-        ]
-    })
+@app.route('/send_messages_to_api', methods=['POST'])
+def send_messages_to_api():
+    details = request.json.get('details')
 
-jchiaramonte_sub = '107555079500216939004'
-pwalnuts_id = '8972406bb759686fb431968e75447cc5a12cfa9f64520075d7f95e4de5a769b4'
-example_scenario = {
-    "scenarios": [
-        {
-            "scenario_id": 'abc123',
-            "user_sub": jchiaramonte_sub,
-            "profile_id": pwalnuts_id,
-            "contents": {
-                "user": {
-                    "user_type": "employee",
-                    "user_id": pwalnuts_id
-                },
-                "message": "Ralphie's giving me agita and I want something done about it.",
-                "children": [
-                    {
-                        "user": {
-                            "user_type": "hr",
-                            "user_id": None
-                        },
-                        "message": "Have you tried speaking to Ralphie?",
-                        "children": []
-                    },
-                    {
-                        "user": {
-                            "user_type": "hr",
-                            "user_id": None
-                        },
-                        "message": "Do you think he needs to be whacked?",
-                        "children": [
-                            {
-                                "user": {
-                                    "user_type": "employee",
-                                    "user_id": pwalnuts_id
-                                },
-                                "message": "He's gotta go.",
-                                "children": []
-                            },
-                            {
-                                "user": {
-                                    "user_type": "employee",
-                                    "user_id": pwalnuts_id
-                                },
-                                "message": "I must respect a made man.",
-                                "children": []
-                            },
-                            {
-                                "user": {
-                                    "user_type": "employee",
-                                    "user_id": pwalnuts_id
-                                },
-                                "message": "I want to cut him out of the esplanade project.",
-                                "children": []
-                            }
-                        ]
-                    },
-                    {
-                        "user": {
-                            "user_type": "hr",
-                            "user_id": None
-                        },
-                        "message": "Would you like me to schedule a meeting with you and Ralphie to discuss your differences?",
-                        "children": []
-                    }
-                ]
-            }
-        },
-        {
-            "scenario_id": '12345rewsdfgtre',
-            "user_sub": '107555079500216939004',
-            "profile_id": 'tsoprano_id',
-            "contents": {}
-        },
-        {
-            "scenario_id": 'abc1asdasd23',
-            "user_sub": '107555079500216939004',
-            "profile_id": 'japrile_id',
-            "contents": {}
-        }
-    ]
-}
+    print("/send_messages_to_api called")
+    chat = generate_chat_from_details(details)
+    response = generate_responses_from_chat(chat)
+
+    return jsonify(response)
 
 @app.route('/get_scenarios', methods=['GET'])
 def get_scenarios():

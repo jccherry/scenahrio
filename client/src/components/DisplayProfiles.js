@@ -79,6 +79,7 @@ function UserProfile({ profile, refreshFunction }) {
               , 'Age': profile.age
               , 'Gender': profile.gender
               , 'Job Title': profile.job_title
+              , 'Current Salary': profile.current_salary
               , 'Years Experience': profile.years_experience
               , 'Notes': profile.notes
             }}
@@ -87,6 +88,7 @@ function UserProfile({ profile, refreshFunction }) {
               profile.age = updatedDict['Age']
               profile.gender = updatedDict['Gender']
               profile.job_title = updatedDict['Job Title']
+              profile.current_salary = updatedDict['Current Salary']
               profile.years_experience = updatedDict['Years Experience']
               profile.notes = updatedDict['Notes']
             }}
@@ -105,6 +107,7 @@ function UserProfileList() {
     , 'Age': null
     , 'Gender': null
     , 'Job Title': null
+    , 'Current Salary' : null
     , 'Years Experience': null
     , 'Notes': null
   })
@@ -146,6 +149,7 @@ function UserProfileList() {
       , 'Age': null
       , 'Gender': null
       , 'Job Title': null
+      , 'Current Salary': null
       , 'Years Experience': null
       , 'Notes': null
     });

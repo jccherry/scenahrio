@@ -252,7 +252,6 @@ button {
   display:flex;
   align-items: center;
   flex-direction: row;
-  font-weight: bold;
   font-size: 18px; /* Adjust the font size as needed */
   margin-bottom: 0; /* Remove padding on the bottom */
   color: #333; /* Dark text color */
@@ -271,25 +270,39 @@ button {
   margin-left: auto;
 }
 
-/* Style for the buttons inside the tree nodes */
-.tree_node_button_container button {
-  background-color: #007bff; /* Button background color */
-  color: white; /* Button text color */
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-  border-radius: 5px;
+.tree_node_content {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
 }
 
-/* Hover effect for tree node buttons */
-.tree_node_button_container button:hover {
-  background-color: #1c3f63; /* Darker blue on hover */
-  transition: background-color 0.3s;
-  color: white;
-  padding: 5px 10px;
-  cursor: pointer;
-  border-radius: 5px;
+.tree_node_name {
+  font-weight: lighter;
+  width: 5vw;
+  min-width: 100px;
+  margin-right: 10px;
+  border-right: 1px solid black;
+  text-align: center;
 }
+
+.tree_node_button_container button {
+  background-color: transparent;
+  color: #385b7c; 
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 20%;
+}
+
+.tree_node_button_container button:hover {
+  color: #00ba22;
+  transition: color 0.3s;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 20%;
+}
+
+.tree_node
 
 /* Style for the scenarioSelector container */
 .scenarioSelector {

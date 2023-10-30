@@ -2,14 +2,37 @@
 
 import React from "react";
 
+import ComponentButton from "./ComponentButton";
+
+import { ReactComponent as TrashIcon } from '../assets/icons/trash.svg';
+import { ReactComponent as FilledTrashIcon } from '../assets/icons/trash-fill.svg';
+import { ReactComponent as BranchIcon } from '../assets/icons/option.svg';
+
 function TreeDisplay({ node, onAddChild, onDeleteNode }) {
     return (
         <div className="tree_node">
             <div className="tree_node_header">
-                {node.message}
+                <div className="tree_node_content">
+                    <div className="tree_node_name">
+                        {node.user}
+                    </div>
+                    <div className="tree_node_message">
+                        {node.message}
+                    </div>
+                </div>
                 <div className="tree_node_button_container">
-                    <button onClick={() => onAddChild(node)}>Add Child</button>
-                    <button onClick={() => onDeleteNode(node)}>Delete Node</button>
+                    <ComponentButton 
+                        className='componentButton'
+                        defaultComponent={<BranchIcon />}
+                        hoverComponent={<BranchIcon />}
+                        onClick={() => onAddChild(node)}
+                    />
+                    <ComponentButton 
+                        className='componentButton'
+                        defaultComponent={<TrashIcon />}
+                        hoverComponent={<FilledTrashIcon />}
+                        onClick={() => onDeleteNode(node)}
+                    />
                 </div>
             </div>
             {node.children && node.children.length > 0 && (
