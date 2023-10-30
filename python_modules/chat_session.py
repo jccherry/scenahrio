@@ -2,6 +2,10 @@
 
 import os
 import openai
+import ast
+
+openai_api_model = 'gpt-4'
+#openai_api_model = 'gpt-3.5-turbo'
 
 system_prompt = f"You are HR-GPT, a Human Resources Simulation AI. Your role is to provide HR users with predictions and suggestions " \
                 f"on how to respond to potential recruitment targets or employees. Responses from HR will be labeled 'HR' and responses " \
@@ -11,7 +15,7 @@ system_prompt = f"You are HR-GPT, a Human Resources Simulation AI. Your role is 
 def generate_chat_from_details(details, num_responses = 3, num_words = 20):
     print("generate_chat_from_details called!")
 
-    print(details)
+    #print(details)
 
     # Create a blank array which will contain our messages
     messages = []
@@ -47,11 +51,10 @@ Notes: {details['profile_notes']}
     # Guidance at the end to make the system give good output
     messages.append({ 'role' : 'system', 
                      'content' : f"""HR's desired outcome is to: {details['desired_outcome']}
-Use all knowledge about the employee's profile, notes, context, and HR's desired outcome to simulate realistic possible responses.
-Generate {num_responses} possible responses to continue the conversation, each with {num_words} words or less.
-Respond as {next_user_spoke}.
-Include at least one positive follow up, at least one negative follow up, and at least one neutral follow up, without labeling them as such.
-Provide output as a python list. Output must be parse-able with python\'s ast.literal_eval() and nothing else, such as ["Let\'s go.", "Don\'t fire me.", "I\'m excited!"].
+Use knowledge about the employee's profile, context, and HR's desired outcome to simulate realistic possible responses.
+Generate {num_responses} possible responses from {next_user_spoke}, each with {num_words} words or less.
+Vary the responses' sentiment from positive to negative.
+Output must be parse-able with python\'s ast.literal_eval() and nothing else, such as ["Let\'s go.", "Don\'t fire me.", "I\'m excited!"].
 """})
 
     return messages
@@ -63,8 +66,29 @@ def generate_responses_from_chat(chat):
     print(f'os.getenv(OPENAI_API_KEY) = {os.getenv("OPENAI_API_KEY")}')
     print(chat)
 
-    response = openai.ChatCompletion.create(model='gpt-3.5-turbo', messages=chat)
+    response = openai.ChatCompletion.create(model=openai_api_model, messages=chat)
+    response_content = response['choices'][0]['message']['content']
 
-    print(response)
+    try:
+        response_list = ast.literal_eval(response_content)
+    except SyntaxError:
+        print("Attempting to fix a syntax error in GPT response...")
+        # If there is an issue parsing the string, attempt to have GPT repair it:
+        fix_messages = [
+            {"role": "system", "content": "You are AST-GPT, a syntax repair bot that takes input in the form of a string and repairs it so that it is parseable with python's ast.literal_eval.  In your response, include only fixed strings with no additional context."}  # Initial system prompt
+            , {"role": "user", "content": list_string}  # broken string
+        ]
+
+        for i in range(3):
+            response = openai.ChatCompletion.create(model='gpt-3.5-turbo', messages=fix_messages)
+            list_string = response['choices'][0]['message']['content']
+            try:
+                response_list = ast.literal_eval(list_string)
+                break
+            except SyntaxError:
+                pass
+
+    print(f"Responses: {type(response_list)}")
+    print(response_list)
 
     return {'A': 'B', 'C' : 'D', 'E' : 'Babbaooey'}
