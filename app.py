@@ -77,10 +77,10 @@ def send_messages_to_api():
     details = request.json.get('details')
 
     print("/send_messages_to_api called")
-    chat = generate_chat_from_details(details)
-    response = generate_responses_from_chat(chat)
+    (chat, next_user) = generate_chat_from_details(details)
+    responses = generate_responses_from_chat(chat, next_user)
 
-    return jsonify(response)
+    return jsonify(responses)
 
 @app.route('/get_scenarios', methods=['GET'])
 def get_scenarios():

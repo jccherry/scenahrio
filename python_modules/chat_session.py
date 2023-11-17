@@ -12,10 +12,12 @@ system_prompt = f"You are HR-GPT, a Human Resources Simulation AI. Your role is 
                 f"from others will be labeled with their name."
 
 # from a details dictionary, generate input for the openAI API
+# returns a tuple with messages for the api and direction on who the
+# next user in the chain is
 def generate_chat_from_details(details, num_responses = 3, num_words = 20):
     print("generate_chat_from_details called!")
 
-    #print(details)
+    print(details)
 
     # Create a blank array which will contain our messages
     messages = []
@@ -57,14 +59,14 @@ Vary the responses' sentiment from positive to negative.
 Output must be parse-able with python\'s ast.literal_eval() and nothing else, such as ["Let\'s go.", "Don\'t fire me.", "I\'m excited!"].
 """})
 
-    return messages
+    return (messages, next_user_spoke)
 
-def generate_responses_from_chat(chat):
+def generate_responses_from_chat(chat, next_user):
     openai.api_key = os.getenv('OPENAI_API_KEY')
 
-    print('generate_responses_from_chat called!')
-    print(f'os.getenv(OPENAI_API_KEY) = {os.getenv("OPENAI_API_KEY")}')
-    print(chat)
+    #print('generate_responses_from_chat called!')
+    #print(f'os.getenv(OPENAI_API_KEY) = {os.getenv("OPENAI_API_KEY")}')
+    #print(chat)
 
     response = openai.ChatCompletion.create(model=openai_api_model, messages=chat)
     response_content = response['choices'][0]['message']['content']
@@ -91,4 +93,12 @@ def generate_responses_from_chat(chat):
     print(f"Responses: {type(response_list)}")
     print(response_list)
 
-    return {'A': 'B', 'C' : 'D', 'E' : 'Babbaooey'}
+    # take the items in the response list and turn it into nice object structures
+    children = []
+    for response in response_list:
+        children.append({
+            'user' : next_user
+            , 'message' : response
+        })
+
+    return children

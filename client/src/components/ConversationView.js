@@ -31,13 +31,12 @@ function ScenarioDetailItem({
 function ConversationView({
     scenario
 }) {
-    const [tree, setTree] = useState(sampleTree);
     const [scenarioDetails, setScenarioDetails] = useState(null);
 
     useEffect(() => {
-        console.log("SCENARIO UPDATED IN ConversationView");
-        console.log(scenario);
-    }, scenario)
+        console.log("SCENARIO DETAILS UPDATED IN ConversationView");
+        console.log(scenarioDetails);
+    }, [scenarioDetails])
 
     const retrieveScenarioContent = async (scenarioId) => {
         fetch('/get_scenario_content', {
@@ -67,60 +66,110 @@ function ConversationView({
         }
     };
 
-    /*
-    const handleAddChild = (parentNode) => {
-        const messages = concatenateMessagesToRoot(parentNode);
-
-        const createNewChild = (message) => {
-            // Create a new child node
-            const newChild = {
-                message: message,
-                selected: true,
-                children: [],
-                parent: parentNode
-            };
-
-            // Add the new child to the parent's children
-            parentNode.children.push(newChild);
-        }
-
-        fetch('/add_nodes_to_tree', {
+    function onBranch(node) {
+        const messages = concatenateMessagesToRoot(node);
+    
+        // Create shallow copies of the scenarioDetails object and its nested contents object
+        const details = { ...scenarioDetails };
+        details.contents = { ...details.contents };
+        details.messages = messages;
+    
+        fetch('/send_messages_to_api', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ messages: messages }),
-        }).then(response => response.json())
-            .then(response => {
-                response.messages.map((message) => {
-                    createNewChild(message);
-                });
-                setTree({ ...tree });
-            });
-    };
+            body: JSON.stringify({ details }),
+        })
+        .then(response => response.json())
+        .then(response => {
 
-    const handleDeleteNode = (nodeToDelete) => {
-        const removeNode = (nodes, node) => {
-            for (let i = 0; i < nodes.length; i++) {
-                if (nodes[i] === node) {
-                    nodes.splice(i, 1);
-                    return;
-                }
-                if (nodes[i].children) {
-                    removeNode(nodes[i].children, node);
-                }
-            }
-        };
+            console.log(`RESPONSE:`);
+            console.log(response);
+            // Find the specific node in details.contents and update its children
+            const updatedContents = updateNodeChildren(details.contents, node, response);
+    
+            // Log the updated node and scenarioDetails (for debugging)
+            console.log("NEW NODE:");
+            console.log(node);
+    
+            console.log("SCENARIODETAILS.contents:");
+            console.log(updatedContents);
+    
+            // Update the state with the new contents object
+            setScenarioDetails({ ...details, contents: updatedContents });
+        });
+    }
+    
+    // Helper function to update children of a specific node in the tree
+    function updateNodeChildren(currentNode, targetNode, newChildren) {
 
-        removeNode(tree.children, nodeToDelete);
-        setTree({ ...tree }); // Trigger re-render
-    };
+        console.log("UpdateNodeChildren:");
+        console.log("Current Node:");
+        console.log(currentNode);
+        console.log("Target Node:");
+        console.log(targetNode);
+
+        if (currentNode.message === targetNode.message && currentNode.user === targetNode.user) {
+            console.log("target node found");
+            // If the current node is the target, update its children
+            return { ...currentNode, children: [...(currentNode.children || []), ...newChildren] };
+        } else if (currentNode.children && currentNode.children.length > 0) {
+            console.log("target node not found, but updating children that I found");
+            // Recursively update children if they exist
+            return { ...currentNode, children: currentNode.children.map(child => updateNodeChildren(child, targetNode, newChildren)) };
+        } else {
+            // Return the current node unchanged if it's not the target and has no children
+            console.log("target node not found and no children, returning");
+            return currentNode;
+        }
+    }
+
+    /*
+    function onBranch(node) {
+        const messages = concatenateMessagesToRoot(node);
+
+        //problem:
+        //scenarioDetails is state variable.
+
+        //I am passing in node.  node is contained within state variable scenarioDetails
+
+    
+        // Create shallow copies of the scenarioDetails object and its nested contents object
+        const details = { ...scenarioDetails };
+        details.contents = { ...details.contents };
+        details.messages = messages;
+    
+        fetch('/send_messages_to_api', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ details }),
+        })
+        .then(response => response.json())
+        .then(response => {
+            // Update the contents object with new children
+            details.contents.children = [...(details.contents.children || []), ...response];    
+            // Log the updated node and scenarioDetails (for debugging)
+            console.log("NEW NODE:");
+            console.log(node);
+    
+            console.log("SCENARIODETAILS.contents:");
+            console.log(details.contents);
+    
+            // Update the state with the new details object
+            setScenarioDetails(details);
+        });
+    }
     */
-
+    
+    /*
     function onBranch(node) {
         console.log("onBranch called!");
         const messages = concatenateMessagesToRoot(node);
-        const details = scenarioDetails;
+        //const details = scenarioDetails;
+        const details = { ...scenarioDetails };
         details.messages = messages;
 
         fetch('/send_messages_to_api', {
@@ -133,8 +182,24 @@ function ConversationView({
             .then(response => {
                 console.log("add_nodes_to_tree API response:")
                 console.log(response);
+                // Now that we have the response, we can add children to
+                // the given node that was passed into the onBranch function
+                if (!node.children) {
+                    node.children = [];
+                }
+                for (var i = 0; i < response.length; i++) {
+                    node.children.push(response[i]);
+                }
+                console.log("NEW NODE:");
+                console.log(node);
+
+                console.log("SCENARIODETAILS.contents:")
+                console.log(scenarioDetails.contents)
+
+                setScenarioDetails(scenarioDetails);
             });
     }
+    */
 
     return (
         <div className='conversationView'>
@@ -155,18 +220,12 @@ function ConversationView({
                         <div className='messageTree'>
                         <TreeDisplay
                             node={scenarioDetails.contents}
+                            profileName={scenarioDetails.profile_name}
                             onAddChild={(node) => {onBranch(node)}}
                             onDeleteNode={(node) => {console.log("delete child button"); console.log(node)}}
                         />
                         </div>
                     }
-                    {/*<div className="tree">
-                        <TreeDisplay
-                            node={tree}
-                            onAddChild={handleAddChild}
-                            onDeleteNode={handleDeleteNode}
-                        />
-                    </div>*/}
                 </>
             }
         </div>

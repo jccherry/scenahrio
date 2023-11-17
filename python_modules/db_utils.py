@@ -1,9 +1,10 @@
-from python_modules.db_connect import execute_command_no_return, execute_query, insert_dataframe_into_table
+from python_modules.db_connect import execute_command_no_return, execute_query, insert_dataframe_into_table, db_connection
 import pandas as pd
 import re
 import hashlib
 import datetime
 import json
+from sqlalchemy import MetaData, Table, update
 
 # create a unique ID by hashing
 def create_id_hash(string_to_hash):
@@ -117,6 +118,31 @@ def add_scenario_to_database(scenario_json, user_sub):
     insert_dataframe_into_table(dict_to_dataframe(insert_dict), 'scenarios')
 
     print(insert_dict)
+
+def add_new_messages_to_scenario(scenario_dict, user_sub, scenario_id):
+    db_engine = db_connection()
+    # Define metadata and load the existing table
+    metadata = MetaData()
+    scenarios = Table("scenarios", metadata, autoload_with=db_engine)
+
+    try:
+        # Construct the SQL update statement
+        update_statement = (
+            update(scenarios)
+            .where(scenarios.c.scenario_id == scenario_id)
+            .values(contents=json.dumps(scenario_dict))
+        )
+
+        # Execute the update statement
+        db_engine.execute(update_statement)
+
+        print(f"Contents for ID {scenario_id} updated successfully.")
+    except Exception as e:
+        # Handle exceptions, e.g., print an error message
+        print(f"Error updating contents for ID {scenario_id}: {str(e)}")
+    finally:
+        # Close the connection
+        db_connection.close()
 
 def get_scenario_list(user_sub):
     query = f"""
