@@ -1,10 +1,12 @@
 from python_modules.db_connect import execute_command_no_return, execute_query, insert_dataframe_into_table, db_connection
+from python_modules.db_models import ScenariosTable
 import pandas as pd
 import re
 import hashlib
 import datetime
 import json
 from sqlalchemy import MetaData, Table, update
+from sqlalchemy.orm import sessionmaker
 
 # create a unique ID by hashing
 def create_id_hash(string_to_hash):
@@ -209,3 +211,24 @@ def get_scenario_from_ids(scenario_id, user_sub):
     """
     ret = execute_query(query)
     return ret
+
+def update_scenario_content_with_id(scenario_id, scenario_contents):
+    engine = db_connection()
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    # Update the contents column for the specified id
+    stmt = (
+        update(ScenariosTable)
+        .where(ScenariosTable.scenario_id == scenario_id)
+        .values(contents=scenario_contents)
+    )
+
+    # Execute the update statement
+    session.execute(stmt)
+
+    # Commit the changes
+    session.commit()
+
+    # Close the session
+    session.close()

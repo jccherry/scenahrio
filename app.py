@@ -144,6 +144,8 @@ def update_scenario_content():
     print("CONTENTS TO UPLOAD: ")
     print(content['contents'])
 
+    update_scenario_content_with_id(content['scenario_id'], content['contents'])
+
     return jsonify({ 'message' : 'Scenario Content Edited'})
 
 
