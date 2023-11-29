@@ -38,6 +38,19 @@ function ConversationView({
         console.log(scenarioDetails);
     }, [scenarioDetails])
 
+    const uploadScenario = () => {
+
+        fetch('/update_scenario_content', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ content: scenarioDetails }),
+        })
+        .then(response => response.json())
+        .then(response => { console.log(response); });
+    };
+
     const retrieveScenarioContent = async (scenarioId) => {
         fetch('/get_scenario_content', {
             method: 'POST',
@@ -125,88 +138,15 @@ function ConversationView({
         }
     }
 
-    /*
-    function onBranch(node) {
-        const messages = concatenateMessagesToRoot(node);
-
-        //problem:
-        //scenarioDetails is state variable.
-
-        //I am passing in node.  node is contained within state variable scenarioDetails
-
-    
-        // Create shallow copies of the scenarioDetails object and its nested contents object
-        const details = { ...scenarioDetails };
-        details.contents = { ...details.contents };
-        details.messages = messages;
-    
-        fetch('/send_messages_to_api', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ details }),
-        })
-        .then(response => response.json())
-        .then(response => {
-            // Update the contents object with new children
-            details.contents.children = [...(details.contents.children || []), ...response];    
-            // Log the updated node and scenarioDetails (for debugging)
-            console.log("NEW NODE:");
-            console.log(node);
-    
-            console.log("SCENARIODETAILS.contents:");
-            console.log(details.contents);
-    
-            // Update the state with the new details object
-            setScenarioDetails(details);
-        });
-    }
-    */
-    
-    /*
-    function onBranch(node) {
-        console.log("onBranch called!");
-        const messages = concatenateMessagesToRoot(node);
-        //const details = scenarioDetails;
-        const details = { ...scenarioDetails };
-        details.messages = messages;
-
-        fetch('/send_messages_to_api', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ details: details}),
-        }).then(response => response.json())
-            .then(response => {
-                console.log("add_nodes_to_tree API response:")
-                console.log(response);
-                // Now that we have the response, we can add children to
-                // the given node that was passed into the onBranch function
-                if (!node.children) {
-                    node.children = [];
-                }
-                for (var i = 0; i < response.length; i++) {
-                    node.children.push(response[i]);
-                }
-                console.log("NEW NODE:");
-                console.log(node);
-
-                console.log("SCENARIODETAILS.contents:")
-                console.log(scenarioDetails.contents)
-
-                setScenarioDetails(scenarioDetails);
-            });
-    }
-    */
-
     return (
         <div className='conversationView'>
             {scenario &&
-                <div className='conversationName'>
-                    {scenario.scenario_name}
-                </div>
+                <>
+                    <div className='conversationName'>
+                        {scenario.scenario_name}
+                    </div>
+                    <button onClick={uploadScenario}>Upload Scenario</button>
+                </>
             }
             {scenarioDetails &&
                 <>
