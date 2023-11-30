@@ -10,12 +10,31 @@ import { ReactComponent as BranchIcon } from '../assets/icons/option.svg';
 import { ReactComponent as PencilIcon } from '../assets/icons/pencil.svg'
 import { ReactComponent as FilledPencilIcon } from '../assets/icons/pencil-fill.svg'
 
-function TreeDisplay({ node, profileName, onAddChild, onDeleteNode, onEditMessage }) {
+function TreeDisplay({ node, profileName, onAddChild, onDeleteNode, onEditNode }) {
 
     const [isEditing, setIsEditing] = useState(false);
     const [inputText, setInputText] = useState(node.message);
+    const [name, setName] = useState(node.user);
 
     const editButtonClicked = (node) => {
+        console.log("Edit Button Pressed!");
+        console.log("Target Node: ");
+        console.log(node);
+
+        console.log("To Change: Name:");
+        console.log(name);
+
+        console.log("new Message: ");
+        console.log(inputText);
+
+        if (isEditing) {
+            const replacementInstructions = {
+                oldNode: node
+                , newNode: {user: name, message: inputText}
+            };
+            onEditNode(replacementInstructions);
+        }
+
         setIsEditing(!isEditing);
         // use the onEditMessageHandler to pass this to the callback
         // in the callback, you should change the underlying
@@ -28,6 +47,7 @@ function TreeDisplay({ node, profileName, onAddChild, onDeleteNode, onEditMessag
 
     const onNameChangeHandler = (event) => {
         console.log(`new Name change event: ${event.target.value}`);
+        setName(event.target.value);
     }
 
     return (
@@ -92,6 +112,9 @@ function TreeDisplay({ node, profileName, onAddChild, onDeleteNode, onEditMessag
                                 onAddChild={onAddChild}
                                 onDeleteNode={onDeleteNode}
                                 profileName={profileName}
+                                onEditNode={(replacementInstructions) => {
+                                    onEditNode(replacementInstructions);
+                                }}
                             />
                         );
                     })}

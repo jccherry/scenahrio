@@ -145,6 +145,7 @@ def add_new_messages_to_scenario(scenario_dict, user_sub, scenario_id):
     finally:
         # Close the connection
         db_connection.close()
+        db_connection.dispose()
 
 def get_scenario_list(user_sub):
     query = f"""

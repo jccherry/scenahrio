@@ -143,6 +143,21 @@ function ConversationView({
         }
     }
 
+    // returns the currentNode with any nodes in its recursive depth that match
+    // the targetNode having their user and message updated to the newNode's
+    // properties
+    function editNode(currentNode, targetNode, newNode) {
+        if (currentNode.message === targetNode.message && currentNode.user === targetNode.user) {
+            currentNode.user = newNode.user;
+            currentNode.message = newNode.message;
+            return currentNode;
+        } else if (currentNode.children && currentNode.children.length > 0) {
+            return { ...currentNode, children: currentNode.children.map(child => editNode(child, targetNode, newNode)) };
+        } else {
+            return currentNode;
+        }
+    }
+
     // specifically look for child nodes of the current node
     // and delete it (them) if they match exactly with what the targetNode
     // is
@@ -204,6 +219,15 @@ function ConversationView({
                             onDeleteNode={(node) => {
                                 const updatedContents = deleteTargetChildNode(scenarioDetails.contents, node);
                                 setScenarioDetails({ ...scenarioDetails, contents: updatedContents });
+                                uploadScenario();
+                            }}
+                            onEditNode={(replacementInstructions) => {
+                                console.log("onEditNode Called!");
+                                console.log("Replacement Instructions:");
+                                console.log(replacementInstructions);
+                                const newTree = editNode(scenarioDetails.contents, replacementInstructions.oldNode, replacementInstructions.newNode);
+                                console.log("New Tree (Edited):");
+                                console.log(newTree);
                                 uploadScenario();
                             }}
                         />
