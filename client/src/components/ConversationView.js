@@ -33,13 +33,14 @@ function ConversationView({
 }) {
     const [scenarioDetails, setScenarioDetails] = useState(null);
 
+    /*
     useEffect(() => {
         console.log("SCENARIO DETAILS UPDATED IN ConversationView");
         console.log(scenarioDetails);
     }, [scenarioDetails])
+    */
 
-    const uploadScenario = () => {
-
+    const uploadScenario = async () => {
         fetch('/update_scenario_content', {
             method: 'POST',
             headers: {
@@ -61,8 +62,8 @@ function ConversationView({
         }).then(response => response.json())
             .then(scenario => {
                 const new_scenario = JSON.parse(scenario.scenario)[0];
-                console.log("new_scenario: ");
-                console.log(new_scenario);
+                //console.log("new_scenario: ");
+                //console.log(new_scenario);
                 setScenarioDetails(new_scenario);
             });
     }
@@ -97,31 +98,35 @@ function ConversationView({
         .then(response => response.json())
         .then(response => {
 
-            console.log(`RESPONSE:`);
-            console.log(response);
+            //console.log(`RESPONSE:`);
+            //console.log(response);
             // Find the specific node in details.contents and update its children
             const updatedContents = updateNodeChildren(details.contents, node, response);
     
+            /*
             // Log the updated node and scenarioDetails (for debugging)
             console.log("NEW NODE:");
             console.log(node);
     
             console.log("SCENARIODETAILS.contents:");
             console.log(updatedContents);
-    
+            */
+
             // Update the state with the new contents object
             setScenarioDetails({ ...details, contents: updatedContents });
+            uploadScenario();
         });
     }
     
     // Helper function to update children of a specific node in the tree
     function updateNodeChildren(currentNode, targetNode, newChildren) {
-
+        /*
         console.log("UpdateNodeChildren:");
         console.log("Current Node:");
         console.log(currentNode);
         console.log("Target Node:");
         console.log(targetNode);
+        */
 
         if (currentNode.message === targetNode.message && currentNode.user === targetNode.user) {
             console.log("target node found");
@@ -138,6 +143,40 @@ function ConversationView({
         }
     }
 
+    // specifically look for child nodes of the current node
+    // and delete it (them) if they match exactly with what the targetNode
+    // is
+    function deleteTargetChildNode(currentNode, targetNode) {
+        /*
+        console.log("deleteTargetChildNode");
+        console.log("Current Node:");
+        console.log(currentNode);
+        console.log("Target Node:");
+        console.log(targetNode);
+        console.log("Child Nodes:");
+        console.log(currentNode.children);
+        */
+
+        // if the node has children, search through the children to delete
+        if (currentNode.children && currentNode.children.length > 0) {
+            for(var i = 0; i < currentNode.children.length; i++) {
+                const child = currentNode.children[i];
+                if (child.message === targetNode.message && child.user === targetNode.user) {
+                    // If we found a match in the children, remove the
+                    // child and return currentNode
+                    currentNode.children.splice(i,1);
+                    return currentNode;
+                }
+            }
+            // If we haven't found a match among the children, apply the
+            // function to all of the children
+            return { ...currentNode, children: currentNode.children.map(achild => deleteTargetChildNode(achild, targetNode)) };
+        } else {
+            // else if there are no children, just return self
+            return currentNode;
+        }
+    }
+
     return (
         <div className='conversationView'>
             {scenario &&
@@ -145,7 +184,7 @@ function ConversationView({
                     <div className='conversationName'>
                         {scenario.scenario_name}
                     </div>
-                    <button onClick={uploadScenario}>Upload Scenario</button>
+                    {/*<button onClick={uploadScenario}>Upload Scenario</button>*/}
                 </>
             }
             {scenarioDetails &&
@@ -162,7 +201,11 @@ function ConversationView({
                             node={scenarioDetails.contents}
                             profileName={scenarioDetails.profile_name}
                             onAddChild={(node) => {onBranch(node)}}
-                            onDeleteNode={(node) => {console.log("delete child button"); console.log(node)}}
+                            onDeleteNode={(node) => {
+                                const updatedContents = deleteTargetChildNode(scenarioDetails.contents, node);
+                                setScenarioDetails({ ...scenarioDetails, contents: updatedContents });
+                                uploadScenario();
+                            }}
                         />
                         </div>
                     }
